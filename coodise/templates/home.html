@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block body%}
+  <div>
+    <br>
+      <h1>
+        <b>{{ path }}</b>
+      </h1>
+    </div>
+  <div>
+    <ul>
+      {{ content }}
+    </ul>
+  </div>
+  <div>
+    <br>
+    <h3>
+      <p>loaded in {{ loadtime }}ms</p>
+    </h2>
+  </div>
+{% endblock %}

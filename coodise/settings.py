@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import environ
+from os import path
+
+env=environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,8 +29,7 @@ SECRET_KEY = 'l*aw1_q)q@*5_!+@d62zq%**!(tdub6s3#)f!irfl9pg=-qp6o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.100", "188.121.161.140"]
-
+ALLOWED_HOSTS = ["192.168.1.100", "188.121.161.140", "127.0.0.1"]
 
 # Application definition
 
@@ -54,7 +57,7 @@ ROOT_URLCONF = 'coodise.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['coodise/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,4 +120,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'coodise/static/'

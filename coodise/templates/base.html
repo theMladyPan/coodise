@@ -1,0 +1,14 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ title }}</title>
+<link rel="shortcut icon" type="image/png" href="{% static 'images/server.png' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+</head>
+
+<body>
+  {% block body %}{% endblock %}
+</body>
+</html>
