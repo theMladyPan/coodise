@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block body%}
   <div>
     <br>
@@ -9,6 +10,16 @@
   <div>
     <ul>
       {{ content }}
+      {{ directories }}
+      {{ files }}
+
+      {% for directory in directories %}
+          <li><a href="{{ directory }}/"><img src="{% static 'images/folder.png' %}" height="33" width="33">{{ directory }}</a></li>
+      {% endfor %}
+
+      {% for file in files %}
+          <li><a href="{{ file }}/"><img src="{% static 'images/music.png' %}" height="33" width="33">{{ file }}</a></li>
+      {% endfor %}
     </ul>
   </div>
   <div>

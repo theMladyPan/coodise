@@ -8,26 +8,27 @@ class MediaType:
 
 class File:
     def __init__(self, path, name):
-        self.is_file = False
-        self.is_dir = False
-        self.full_path = os.path.join(path, name)
         self.name = name
+        self.full_path = os.path.join(path, name)
+        self.is_dir = os.path.isdir(self.full_path)
+        self.is_file = os.path.isfile(self.full_path)
         self.type = MediaType(None)  # media, music, video ...
 
+    def __repr__(self):
+        return self.name
 
-def is_dir(testfile):
-    try:
-        os.chdir(testfile)
-        os.chdir("..")
-        return True
-    except FileNotFoundError:
-        return False
+    def get_full_path(self):
+        return self.full_path
+
 
 def parse_directory(directory):
-    items = os.listdir(os.path.join(settings.MEDIA_DIR,directory))
-    directories, files = [".."], []
+    full_path = os.path.join(settings.MEDIA_DIR,directory)
+    items = os.listdir(full_path)
+    directories, files = [File(full_path,"..")], []
+
     for item in items:
-        if is_dir(item):
+        file = File(full_path, item)
+        if file.is_dir:
             directories.append(item)
         else:
             files.append(item)

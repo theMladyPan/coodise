@@ -5,14 +5,13 @@ from time import time, sleep
 from ..utils import parser
 
 class Main(View):
-    content = {'path': '/home/odroid',
-               'content': 'Hello',
+    content = {'content': 'Hello',
                'loadtime': 'fill_later'}
     template = 'main.html'
 
     def get(self, request, *args, **kwargs):
         stopwatch = time()
-        dir_content = parser.parse_directory(self.content['path'])
+        dir_content = parser.parse_directory(kwargs['look_path'])
         self.content['directories'] = dir_content[0]
         self.content['files'] = dir_content[1]
         self.content['loadtime'] = "%d"%((time()-stopwatch)*1000)

@@ -6,7 +6,7 @@ from ..utils import parser
 class Index(View):
     content = {'title': "Index",
                'path': "."}
-    template = 'index.html'
+    template = 'main.html'
 
     def get(self, request, *args, **kwargs):
         dir_content = parser.parse_directory(self.content['path'])
