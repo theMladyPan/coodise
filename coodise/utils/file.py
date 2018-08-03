@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 from .. import settings
 
@@ -16,12 +18,13 @@ class MediaType:
     def yield_type_from_filename(self, filename):
         extension = filename.split(".")[-1].lower()
         d_extensions = dict()
+        d_extensions["image"] = ["iso", "img"]
         d_extensions["video"] = ["webm", "avi", "mov", "mkv","mp4","3gp","divx","mpeg","mpg"]
         d_extensions["picture"] = ["png", "jpg", "jpeg","tif","tiff","bmp","gif"]
         d_extensions["audio"] = ["mp3","flac","ogg","wav","wma"]
         d_extensions["text"] = ["txt","py", "pyw", "cpp","log", "srt", "c", "m", "h", "hpp"]  # TODO: extend this list
 
-        if extension in d_extensions["picture"]:  # TODO: implement other types
+        if extension in d_extensions["picture"]:  # TODO: implement other types
             return "Picture"
         elif extension in d_extensions["video"]:
             return "Video"
@@ -29,6 +32,8 @@ class MediaType:
             return "Audio"
         elif extension in d_extensions["text"]:
             return "Text"
+        elif extension in d_extensions["image"]:
+            return "Image"
         else:
             return None
 
