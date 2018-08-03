@@ -6,7 +6,7 @@ font-weight:bold;
 }
 
 div {
-  width: 100%%;
+  width: 100%;
 }
 
 ul {
@@ -31,7 +31,7 @@ li a {
   color:#fff;
   text-decoration: none;
   display:inline;
-  width: 100%%;
+  width: 100%;
 
   -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
   -moz-transition: font-size 0.3s ease, background-color 0.3s ease;

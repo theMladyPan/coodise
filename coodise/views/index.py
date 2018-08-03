@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.http import HttpResponseRedirect  # if redirecting after successfull POST
 from django.shortcuts import render
 from django.views import View
