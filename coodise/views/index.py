@@ -4,8 +4,8 @@ from django.views import View
 from ..utils import parser
 
 class Index(View):
-    content = {'title': "Index",
-               'path': "."}
+    content = {'title': "Coodise",
+               'path': ""}
     template = 'main.html'
 
     def get(self, request, *args, **kwargs):

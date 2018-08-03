@@ -2,30 +2,40 @@
 {% load static %}
 {% block body%}
   <div>
-    <br>
-      <h1>
-        <b>{{ path }}</b>
-      </h1>
-    </div>
+    <h1>
+      <b>
+        {% if path %}
+        Coodise/{{ path }}
+        {% else %}
+        Coodise index
+        {% endif %}</b>
+    </h1>
+  </div>
   <div>
     <ul>
-      {{ content }}
-      {{ directories }}
-      {{ files }}
-
       {% for directory in directories %}
-          <li><a href="{{ directory }}/"><img src="{% static 'images/folder.png' %}" height="33" width="33">{{ directory }}</a></li>
+        {% if directory.relative_path %}
+          <li><a href="{% if not path %}path/{% endif %}{{ directory }}/"><img src="/file/coodise/static/images/folder.png" height="33" width="33">{{ directory }}</a></li>
+        {% else %}
+          <li><a href="/"><img src="/file/coodise/static/images/folder.png" height="33" width="33">{{ directory }}</a></li>
+        {% endif %}
       {% endfor %}
 
       {% for file in files %}
-          <li><a href="{{ file }}/"><img src="{% static 'images/music.png' %}" height="33" width="33">{{ file }}</a></li>
+          <li><a href="/file/{{ file.get_full_path }}/"><img src="/file/coodise/static/images/{{ file.media_type.image }}" height="33" width="33">{{ file }}</a></li>
+
       {% endfor %}
     </ul>
   </div>
   <div>
     <br>
     <h3>
+      {% if loadtime %}
       <p>loaded in {{ loadtime }}ms</p>
+      {% endif %}
+      {% if info %}
+      <p>info: {{ info }}</p>
+      {% endif %}
     </h2>
   </div>
 {% endblock %}

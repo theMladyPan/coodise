@@ -16,9 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from .views import main, index
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'(?P<look_path>[0-9_/a-zA-Z]+)/$', main.Main.as_view(), name="FromRE"),
+    url(r'path/(?P<look_path>[0-9_/a-zA-Z.$]+)/$', main.Main.as_view(), name="FromRE"),
+    url(r'file/(?P<file_name>[0-9_/a-zA-Z.$]+)/$', main.Serve.as_view(), name="FromRE"),
     url(r'^$', index.Index.as_view())
 ]
+
+urlpatterns += staticfiles_urlpatterns()

@@ -118,7 +118,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = 'coodise/static/'
+STATIC_ROOT = '/home/stanke/coodise/coodise/static'
 
 # Put folder with MEDIA in here:
 
-MEDIA_DIR = '/mnt/Slurm/Videos'
+MEDIA_DIR = 'Videos'

@@ -3,9 +3,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{{ title }}</title>
+<title>
+  {% if title %}
+  {{ title }}
+  {% else %}
+  Coodise
+  {% endif %}
+  </title>
 <link rel="shortcut icon" type="image/png" href="{% static 'images/server.png' %}"/>
-<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+<link rel="stylesheet" type="text/css" href="/file/coodise/static/style.css" />
 </head>
 
 <body>
