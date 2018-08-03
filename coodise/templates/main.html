@@ -14,16 +14,61 @@
   <div>
     <ul>
       {% for directory in directories %}
-        {% if directory.relative_path %}
-          <li><a href="{% if not path %}path/{% endif %}{{ directory }}/"><img src="/file/coodise/static/images/folder.png" height="33" width="33">{{ directory }}</a></li>
-        {% else %}
-          <li><a href="/"><img src="/file/coodise/static/images/folder.png" height="33" width="33">{{ directory }}</a></li>
+        {% if path or not directory.is_parent %}
+          {% if directory.relative_path %}
+            <li>
+              <a href="{% if not path %}path/{% endif %}{{ directory }}/">
+                <img src="/file/coodise/static/images/{{ directory.media_type.image }}" height="33" width="33">{{ directory }}
+              </a>
+            </li>
+          {% else %}
+            <li>
+              <a href="/"><img src="/file/coodise/static/images/{{ directory.media_type.image }}" height="33" width="33">{{ directory }}</a>
+            </li>
+          {% endif %}
         {% endif %}
       {% endfor %}
 
       {% for file in files %}
-          <li><a href="/file/{{ file.get_full_path }}/"><img src="/file/coodise/static/images/{{ file.media_type.image }}" height="33" width="33">{{ file }}</a></li>
+        {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
+            <a title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
+              <img src="/file/coodise/static/images/play.png" width="30">
+            </a>
+            {% if file.get_media_type == "Video" %}
+                <p id="spoiler_{{ file }}" style="display:none;clear:both">
+                    <video height="480" width="640" preload="none" controls>
+                        <source src="/file/{{ file.get_full_path }}/">
+                        Your brower is piece of crap
+                    </video>
+                </p>
+            {% elif file.get_media_type == "Audio" %}
+                <p id="spoiler_{{ file }}" style="display:none;clear:both">
+                    <audio preload="none" controls>
+                        <source src="/file/{{ file.get_full_path }}/">
+                        Your brower is piece of crap
+                    </audio>
+                </p>
+            {% elif file.get_media_type == "Picture" %}
+                <p id="spoiler_{{ file }}" style="display:none;clear:both">
+                    <img src="/file/{{ file.get_full_path }}/">
+                </p>
+            {% elif file.get_media_type == "Text" %}
+                <p id="spoiler_{{ file }}" style="display:none;clear:both">
+                  <span style="white-space: pre-line">
+                    <code>
+                      {{ file.get_content }}
+                    </code>
+                  </span>
+                </p>
+            {% endif %}
 
+        {% else %}
+          <img src="/file/coodise/static/images/blank.png" width="30">
+        {% endif %}
+        <li>
+          <a href="/file/{{ file.get_full_path }}/"><img src="/file/coodise/static/images/{{ file.media_type.image }}" height="33" width="33">{{ file }}
+          </a>
+        </li>
       {% endfor %}
     </ul>
   </div>

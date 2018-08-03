@@ -122,4 +122,4 @@ STATIC_ROOT = '/home/stanke/coodise/coodise/static'
 
 # Put folder with MEDIA in here:
 
-MEDIA_DIR = 'Videos'
+MEDIA_DIR = 'Cloud'

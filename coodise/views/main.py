@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect  # if redirecting after successfull POST
+from django.http import HttpResponse, HttpResponseRedirect  # if redirecting after successfull POST
 from django.shortcuts import render
 from django.views import View
 from time import time, sleep
@@ -10,10 +10,13 @@ import os
 class Serve(View):
     def get(self, request, *args, **kwargs):
         filepath = kwargs['file_name']
-        return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
+        with open(filepath, "rb") as wish_file:
+            response = HttpResponse(wish_file.read(), content_type='application')
+        response['Content-Disposition'] = 'attachment; filename="{}"'.format(filepath.split("/")[-1])
+        return response
 
 
-class Main(View):
+class List(View):
     content = dict()
     template = 'main.html'
 

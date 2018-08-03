@@ -10,7 +10,10 @@ __pycache__/
 .idea/*
 
 # static files
-coodise/static/*
+coodise/static/admin/*
+
+# Cloud files
+Cloud
 
 # Distribution / packaging
 .Python
