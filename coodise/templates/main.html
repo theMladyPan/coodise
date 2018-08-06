@@ -18,21 +18,22 @@
           {% if directory.relative_path %}
             <li>
               <a href="{% if not path %}path/{% endif %}{{ directory }}/">
-                <img src="/file/coodise/static/images/{{ directory.media_type.image }}" height="33" width="33">{{ directory }}
+                <img src="{% static "images/" %}{{ directory.media_type.image }}" height="33" width="33">{{ directory }}
               </a>
             </li>
           {% else %}
             <li>
-              <a href="/"><img src="/file/coodise/static/images/{{ directory.media_type.image }}" height="33" width="33">{{ directory }}</a>
+              <a href="/"><img src="{% static "images/" %}{{ directory.media_type.image }}" height="33" width="33">{{ directory }}</a>
             </li>
           {% endif %}
         {% endif %}
       {% endfor %}
 
       {% for file in files %}
+      <li>
         {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
             <a title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
-              <img src="/file/coodise/static/images/play.png" width="30">
+              <img src="{% static "images/play.png" %}" width="30">
             </a>
             {% if file.get_media_type == "Video" %}
                 <p id="spoiler_{{ file }}" style="display:none;clear:both">
@@ -63,10 +64,9 @@
             {% endif %}
 
         {% else %}
-          <img src="/file/coodise/static/images/blank.png" width="30">
+          <img src="{% static "images/blank.png" %}" width="30">
         {% endif %}
-        <li>
-          <a href="/file/{{ file.get_full_path }}/"><img src="/file/coodise/static/images/{{ file.media_type.image }}" height="33" width="33">{{ file }}
+          <a href="/file/{{ file.get_full_path }}/"><img src="{% static "images/" %}{{ file.media_type.image }}" height="33" width="33">{{ file }}
           </a>
         </li>
       {% endfor %}

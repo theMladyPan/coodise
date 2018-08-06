@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from .. import settings
+from django.conf import settings
 
 class MediaType:
     def __init__(self, filename = "", type = None):

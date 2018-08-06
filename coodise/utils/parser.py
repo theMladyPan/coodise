@@ -2,7 +2,7 @@
 
 import os
 from .file import File
-from .. import settings
+from django.conf import settings
 
 
 
