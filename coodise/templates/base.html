@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
-<head>
-<title>
-  {% if title %}
-  {{ title }}
-  {% else %}
-  Coodise
-  {% endif %}
-  </title>
-<link rel="shortcut icon" type="image/png" href="{% static "images/server.png" %}"/>
+  <head>
+    <title>
+      {% if title %}
+      {{ title }}
+      {% else %}
+      Coodise
+      {% endif %}
+    </title>
+    <link rel="shortcut icon" type="image/png" href="{% static "images/server.png" %}"/>
 
-<link rel="stylesheet" type="text/css" href="{% static "style.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}" />
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-</head>
-<body>
-  {% block body %}{% endblock %}
-</body>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  </head>
+  <body>
+    {% block body %}{% endblock %}
+  </body>
 </html>

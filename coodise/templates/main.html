@@ -30,7 +30,7 @@
       {% endfor %}
 
       {% for file in files %}
-      <li>
+      <li class="white">
         {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
             <a title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
               <img src="{% static "images/play.png" %}" width="30">
@@ -82,5 +82,16 @@
       <p>info: {{ info }}</p>
       {% endif %}
     </h2>
+  </div>
+
+
+  <div class="white">
+    <li>
+      {% if user.is_anonymous %}
+      <a href="/login/{{ current_path }}">Login</a>
+      {% else %}
+      <a href="/logout">Logout</a>
+      {% endif %}
+    </li>
   </div>
 {% endblock %}

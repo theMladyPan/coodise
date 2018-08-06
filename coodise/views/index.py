@@ -14,4 +14,5 @@ class Index(View):
         dir_content = parser.parse_directory(self.content['path'])
         self.content['directories'] = dir_content[0]
         self.content['files'] = dir_content[1]
+        self.content["current_path"] = self.content['path']
         return render(request, self.template, self.content)
