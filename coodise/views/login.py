@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth import logout, login
 from django.views import View
 from ..forms.forms import LoginForm
+from time import sleep
 
 class Login(View):
     content = dict()
@@ -21,6 +22,7 @@ class Login(View):
         username = request.POST["user_name"]
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
+        sleep(1)
         if user is not None:
             login(request, user)
             return redirect("/" + redirect_to)

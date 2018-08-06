@@ -15,7 +15,7 @@ class Serve(View):
     def get(self, request, *args, **kwargs):
         filepath = kwargs['file_name']
         user = request.user
-        if user.is_anonymous():
+        if user.is_anonymous:
             return redirect("/")
         else:
             with open(filepath, "rb") as wish_file:
@@ -31,7 +31,7 @@ class List(View):
     def get(self, request, *args, **kwargs):
         stopwatch = time()
         user = request.user
-        if user.is_anonymous():
+        if user.is_anonymous:
             dir_content = parser.parse_directory(kwargs['look_path'])
             self.content['files'] = []  # dont show files to user
         else:

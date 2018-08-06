@@ -9,9 +9,6 @@ __pycache__/
 # pycharm retarded files
 .idea/*
 
-# static files
-coodise/static/admin/*
-
 # Cloud files
 Cloud
 
