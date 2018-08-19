@@ -1,21 +1,31 @@
-<!DOCTYPE html>
+{% extends 'bootstrap.html' %}
+
 {% load static %}
-<html>
-  <head>
-    <title>
-      {% if title %}
-      {{ title }}
-      {% else %}
-      Coodise
-      {% endif %}
-    </title>
-    <link rel="shortcut icon" type="image/png" href="{% static "images/server.png" %}"/>
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
 
-    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}" />
+{% block title %}
+  Coodise index
+{% endblock %}
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  </head>
-  <body>
-    {% block body %}{% endblock %}
-  </body>
-</html>
+{% block extrahead %}
+  <link rel="shortcut icon" type="image/png" href="{% static "images/server.png" %}"/>
+{% endblock %}
+
+{% block bootstrap3_content %}
+
+  {% autoescape off %}
+    {% bootstrap_messages %}
+  {% endautoescape %}
+
+  <nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Coodise</a>
+      {% block navbar %}
+      {% endblock %}
+  </nav>
+
+  {% block body %}
+    [No content ]
+  {% endblock %}
+
+{% endblock %}

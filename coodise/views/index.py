@@ -6,7 +6,7 @@ from django.views import View
 from ..utils import parser
 
 class Index(View):
-    content = {'title': "Coodise",
+    content = {'webpage_title': "Coodise index",
                'path': ""}
     template = 'main.html'
 

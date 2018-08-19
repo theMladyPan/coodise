@@ -18,7 +18,6 @@ class Login(View):
         redirect_to = kwargs["redirect_to"]
         if redirect_to != "":
             redirect_to = "path/" + redirect_to
-
         username = request.POST["user_name"]
         password = request.POST["password"]
         user = authenticate(username=username, password=password)

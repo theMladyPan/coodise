@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 {% load static %}
+
+{% block title %}
+{% if webpage_title %}
+    {{ webpage_title }}
+  {% else %}
+  {{ path_tail }}
+{% endif %}
+{% endblock %}
+
 {% block body%}
-  <div>
-    <h1>
-      <b>
-        {% if path %}
-        Coodise/{{ path }}
-        {% else %}
-        Coodise index
-        {% endif %}</b>
-    </h1>
-  </div>
   <div>
     <ul>
       {% for directory in directories %}
@@ -30,7 +30,7 @@
       {% endfor %}
 
       {% for file in files %}
-      <li class="white">
+      <li>
         {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
             <a title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
               <img src="{% static "images/play.png" %}" width="30">
@@ -40,7 +40,7 @@
                     <video height="480" width="640" preload="none" controls>
                         <source src="/file/{{ file.get_full_path }}/">
                         Your brower is piece of crap
-                    </video>
+                    </video>'demo/
                 </p>
             {% elif file.get_media_type == "Audio" %}
                 <p id="spoiler_{{ file }}" style="display:none;clear:both">
@@ -72,26 +72,32 @@
       {% endfor %}
     </ul>
   </div>
+  {% if loadtime %}
   <div>
     <br>
     <h3>
-      {% if loadtime %}
       <p>loaded in {{ loadtime }}ms</p>
-      {% endif %}
-      {% if info %}
-      <p>info: {{ info }}</p>
-      {% endif %}
-    </h2>
+    </h3>
   </div>
+  {% endif %}
+{% endblock %}
 
 
-  <div class="white">
-    <li>
-      {% if user.is_anonymous %}
-      <a href="/login/{{ current_path }}">Login</a>
-      {% else %}
-      <a href="/logout">Logout</a>
-      {% endif %}
-    </li>
-  </div>
+<div class="white">
+ <li>
+   {% if user.is_anonymous %}
+   <a href="/login/{{ current_path }}">Login</a>
+   {% else %}
+   <a href="/logout">Logout</a>
+   {% endif %}
+ </li>
+</div>
+
+
+{% block navbar %}
+  <form class="form-inline">
+    {% for element in path_elements %}
+      >> <a class="nav-item nav-link" href="/path/{{ element.0 }}">{{ element.1 }}</a>
+    {% endfor %}
+   </form>
 {% endblock %}
