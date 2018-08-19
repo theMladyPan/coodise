@@ -4,11 +4,8 @@
 
 {% block content %}
   <h2>Unauthorized access. Please login.</h2>
-  <form method="post">
     {% csrf_token %}
-    {{ form.as_ul }}
-    <button type="submit">Login</button>
-  </form>
+    {% crispy form %}
 {% endblock %}
 
 {% endblock %}
