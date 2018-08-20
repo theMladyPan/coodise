@@ -2,13 +2,13 @@
 
 from django.http import HttpResponse, HttpResponseRedirect  # if redirecting after successfull POST
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views import View
 from time import time, sleep
 from ..utils import parser
 from django.views.static import serve
 import os
 from django.contrib.auth import authenticate
-from django.shortcuts import redirect
 
 
 class Serve(View):

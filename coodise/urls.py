@@ -19,6 +19,7 @@ from django.contrib import admin
 from .views import main
 from .views import index
 from .views import login
+from .views import test
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles import views
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'path/(?P<look_path>.*)/$', main.List.as_view(), name="FromRE"),
     url(r'file/(?P<file_name>.*)/$', main.Serve.as_view(), name="FromRE"),
     url(r'path/$', RedirectView.as_view(url="/"), name="index"),
+    url(r'test/$', test.jQuery.as_view()),
     url(r'^$', index.Index.as_view())
 ]
 urlpatterns += staticfiles_urlpatterns()

@@ -8,12 +8,12 @@
   Coodise index
 {% endblock %}
 
-{% block extrahead %}
+{% block bootstrap3_extra_head %}
   <link rel="shortcut icon" type="image/png" href="{% static "images/server.png" %}"/>
+  {% block extra_css %}{% endblock %}
 {% endblock %}
 
 {% block bootstrap3_content %}
-
   {% autoescape off %}
     {% bootstrap_messages %}
   {% endautoescape %}
