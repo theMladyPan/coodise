@@ -4,6 +4,7 @@
 
 {% block bootstrap3_extra_script %}
 <script src={% static "js/navbar.js" %}></script>
+<script src={% static "js/content_filter.js" %}></script>
 {% endblock %}
 
 {% block title %}
@@ -15,26 +16,20 @@
 {% endblock %}
 
 {% block body%}
-  <div>
-    <ul>
+  <div class="list-group">
       {% for directory in directories %}
         {% if path or not directory.is_parent %}
           {% if directory.relative_path %}
-            <li>
-              <a href="{% if not path %}path/{% endif %}{{ directory }}/">
+              <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item">
                 <img src="{% static "images/" %}{{ directory.media_type.image }}" height="33" width="33">{{ directory }}
               </a>
-            </li>
           {% else %}
-            <li>
-              <a href="/"><img src="{% static "images/" %}{{ directory.media_type.image }}" height="33" width="33">{{ directory }}</a>
-            </li>
+              <a href="/"><img src="{% static "images/" %}{{ directory.media_type.image }}" height="33" width="33"  class="list-group-item">{{ directory }}</a>
           {% endif %}
         {% endif %}
       {% endfor %}
 
       {% for file in files %}
-      <li>
         {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
             <a title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
               <img src="{% static "images/play.png" %}" width="30">
@@ -70,11 +65,10 @@
         {% else %}
           <img src="{% static "images/blank.png" %}" width="30">
         {% endif %}
-          <a href="/file/{{ file.get_full_path }}/"><img src="{% static "images/" %}{{ file.media_type.image }}" height="33" width="33">{{ file }}
+          <a href="/file/{{ file.get_full_path }}/" class="list-group-item"><img src="{% static "images/" %}{{ file.media_type.image }}" height="33" width="33">{{ file }}
           </a>
         </li>
       {% endfor %}
-    </ul>
   </div>
 
   {% if loadtime %}
@@ -88,13 +82,6 @@
 
 {% endblock %}
 
-  <div class="white">
-      {% if user.is_anonymous %}
-      <a href="/login/{{ current_path }}">Login</a>
-      {% else %}
-      <a href="/logout">Logout</a>
-      {% endif %}
-  </div>
 
 {% block navbar %}
   <ul class="nav navbar-nav">
@@ -104,6 +91,7 @@
   </ul>
 
   <ul class="nav navbar-nav navbar-right">
+    <li><input class="form-control" id="filterInput" type="text" placeholder="Filter..."></li>
     {% if user.is_anonymous %}
       <li><a href="/login/{{ current_path }}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
     {% else %}

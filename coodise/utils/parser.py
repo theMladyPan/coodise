@@ -5,13 +5,10 @@ from .file import File
 from django.conf import settings
 
 
-
 def parse_directory(directory):
     full_path = os.path.join(settings.MEDIA_DIR,directory)
     items = os.listdir(full_path)
-    parent = File(full_path,"..", True)
-    parent.media_type.image = "up.png"
-    directories, files = [parent], []
+    directories, files = [], []
 
     for item in items:
         file = File(full_path, item)
