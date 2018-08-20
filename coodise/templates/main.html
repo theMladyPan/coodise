@@ -2,6 +2,10 @@
 {% load bootstrap3 %}
 {% load static %}
 
+{% block bootstrap3_extra_script %}
+<script src={% static "js/navbar.js" %}></script>
+{% endblock %}
+
 {% block title %}
 {% if webpage_title %}
     {{ webpage_title }}
@@ -72,6 +76,7 @@
       {% endfor %}
     </ul>
   </div>
+
   {% if loadtime %}
   <div>
     <br>
@@ -80,24 +85,29 @@
     </h3>
   </div>
   {% endif %}
+
 {% endblock %}
 
-
-<div class="white">
- <li>
-   {% if user.is_anonymous %}
-   <a href="/login/{{ current_path }}">Login</a>
-   {% else %}
-   <a href="/logout">Logout</a>
-   {% endif %}
- </li>
-</div>
-
+  <div class="white">
+      {% if user.is_anonymous %}
+      <a href="/login/{{ current_path }}">Login</a>
+      {% else %}
+      <a href="/logout">Logout</a>
+      {% endif %}
+  </div>
 
 {% block navbar %}
-  <form class="form-inline">
+  <ul class="nav navbar-nav">
     {% for element in path_elements %}
-      >> <a class="nav-item nav-link" href="/path/{{ element.0 }}">{{ element.1 }}</a>
+      <li><a href="/path/{{ element.0 }}">{{ element.1 }}</a></li>
     {% endfor %}
-   </form>
+  </ul>
+
+  <ul class="nav navbar-nav navbar-right">
+    {% if user.is_anonymous %}
+      <li><a href="/login/{{ current_path }}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+    {% else %}
+      <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+    {% endif %}
+  </ul>
 {% endblock %}

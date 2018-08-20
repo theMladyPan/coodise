@@ -8,8 +8,9 @@
   Coodise index
 {% endblock %}
 
-{% block extrahead %}
-  <link rel="shortcut icon" type="image/png" href="{% static "images/server.png" %}"/>
+{% block bootstrap3_extra_head %}
+  <link rel="shortcut icon" type="image/png" href="{% static "images/coodise.png" %}"/>
+  {% block extra_css %}{% endblock %}
 {% endblock %}
 
 {% block bootstrap3_content %}
@@ -18,11 +19,15 @@
     {% bootstrap_messages %}
   {% endautoescape %}
 
-  <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Coodise</a>
+  <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Coodise</a>
+    </div>
       {% block navbar %}
       {% endblock %}
-  </nav>
+  </div>
+</nav>
 
   {% block body %}
     [No content ]
