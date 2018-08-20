@@ -1,0 +1,14 @@
+.blue{
+  color:blue
+}
+.red{
+  color:red
+}
+.green{
+  color:green
+}
+.highlight{
+  color:blue;
+  background:blue;
+  font-weigh:bold
+}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static "css/test.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block bootstrap3_extra_script %}
+<script src={% static "js/test.js" %}></script>
+{% endblock %}
+
+{% block body %}
+<a class="test" href="/">Index</a>
+<a class="test" href="/">Index</a>
+
+<ul class="test">
+	<li>Polozka zoznamu</li>
+	<li>Dalsia polozka zoznamu</li>
+	<li>Tretia polozka zoznamu</li>
+	<li>Este jedna polozka zoznamu</li>
+</ul>
+<ul id="prvyUl">
+	<li>Novy zoznam</li>
+	<li>Dalsia polozka noveho zoznamu</li>
+	<li>Este jedna polozka</li>
+</ul>
+
+{% endblock %}
