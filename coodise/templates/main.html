@@ -39,7 +39,7 @@
         {% endfor %}
 
         {% for file in files %}
-        <a href="{% url "file_server" file.get_full_path %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}">
+        <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}">
           {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
             {% if not user.is_anonymous %}
               {% if file.get_media_type == "Video" %}
@@ -70,7 +70,7 @@
                   </p>
               {% endif %}
 
-              <span class="badge file" title="Click to show/hide content" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_{{ file }}') .style.display='none'}">
+              <span class="badge spoiler" title="Click to show/hide content" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_{{ file }}') .style.display='none'}">
                 <span class="glyphicon glyphicon-search"></span>
               </span>
             {% endif %}
