@@ -3,8 +3,17 @@
 {% block body%}
 {% load crispy_forms_tags %}
 
+
+{% block bootstrap3_extra_script %}
+  <script src={% static "js/navbar.js" %}></script>
+  <script src={% static "js/main.js" %}></script>
+{% endblock %}
+
 {% block content %}
+
+  <div id="mainContainer" class="container">
     {% crispy login_form %}
+  </div>
 {% endblock %}
 
 {% endblock %}
