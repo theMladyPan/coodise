@@ -71,13 +71,12 @@
               {% endif %}
 
             </span>
-          {% else %}
-            <img src="{% static "images/blank.png" %}" width="30">
+            <span class="badge file" title="Click to show/hide content" onmouseover="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
+              <span class="glyphicon glyphicon-search"></span>
+            </span>
           {% endif %}
             <span class="glyphicon {{ file.media_type.image }}"></span> {{ file }}
 
-                        <span class="badge file" title="Click to show/hide content" onmouseover="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
-                          <span class="glyphicon glyphicon-search"></span>
             </a>
         {% endfor %}
     </div>
