@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body%}
+{% load crispy_forms_tags %}
 
 {% block content %}
-  <h2>Unauthorized access. Please login.</h2>
-    {% csrf_token %}
-    {# {% crispy form %} #}
+    {% crispy login_form %}
 {% endblock %}
 
 {% endblock %}

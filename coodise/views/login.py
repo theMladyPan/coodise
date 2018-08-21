@@ -5,34 +5,41 @@ from django.contrib.auth import logout, login
 from django.views import View
 from ..forms.forms import LoginForm
 from time import sleep
+from django.urls import reverse
+
 
 class Login(View):
+    """Login webpage."""
+
     content = dict()
     template = "login.html"
 
     def get(self, request, *args, **kwargs):
-        self.content["form"] = LoginForm
+        self.content["login_form"] = LoginForm
         return render(request, self.template, self.content)
 
     def post(self, request, *args, **kwargs):
         redirect_to = kwargs["redirect_to"]
-        if redirect_to != "":
-            redirect_to = "path/" + redirect_to
         username = request.POST["user_name"]
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
-        sleep(1)
-        if user is not None:
+        sleep(0.1)
+        if user is not None and user.is_active:
             login(request, user)
-            return redirect("/" + redirect_to)
+            if redirect_to:
+                return redirect(reverse("path", args=(redirect_to, )))
+            else:
+                return redirect(reverse("index"))
         else:
             return render(request, self.template, self.content)
 
+
 class Logout(View):
+    """Logout webpage."""
+
     template = "login.html"
     content = dict()
+
     def get(self, request, *args, **kwargs):
         logout(request)
-        return redirect("/")
-
-        return render(request, self.template, self.content)
+        return redirect(reverse("index"))

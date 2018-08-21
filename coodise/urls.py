@@ -19,19 +19,15 @@ from django.contrib import admin
 from .views import main
 from .views import index
 from .views import login
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib.staticfiles import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic.base import RedirectView
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^login/(?P<redirect_to>.*)$', login.Login.as_view()),
-    url(r'^logout/', login.Logout.as_view()),
-    url(r'path/(?P<look_path>.*)/$', main.List.as_view(), name="FromRE"),
-    url(r'file/(?P<file_name>.*)/$', main.Serve.as_view(), name="FromRE"),
+    url(r'^admin/', admin.site.urls, name="admin"),
+    url(r'^login/(?P<redirect_to>.*)$', login.Login.as_view(), name="login"),
+    url(r'^logout/', login.Logout.as_view(), name="logout"),
+    url(r'path/(?P<look_path>.*)/$', main.List.as_view(), name="path"),
+    url(r'file/(?P<file_name>.*)/$', main.Serve.as_view(), name="file_server"),
     url(r'path/$', RedirectView.as_view(url="/"), name="index"),
     url(r'^$', index.Index.as_view())
 ]
