@@ -3,7 +3,7 @@
 from django.http import HttpResponse, HttpResponseRedirect  # if redirecting after successfull POST
 from django.shortcuts import render
 from django.views import View
-from time import time, sleep
+from time import time
 from ..utils import parser
 from django.views.static import serve
 import os
@@ -12,6 +12,8 @@ from django.shortcuts import redirect
 
 
 class Serve(View):
+    """Basic fileserver."""
+
     def get(self, request, *args, **kwargs):
         filepath = kwargs['file_name']
         user = request.user
@@ -20,10 +22,10 @@ class Serve(View):
         else:
             return serve(request, os.path.basename(filepath),
                          os.path.dirname(filepath))
-            #with open(filepath, "rb") as wish_file:
+            # with open(filepath, "rb") as wish_file:
             #    response = HttpResponse(wish_file.read(), content_type='application')
-            #response['Content-Disposition'] = 'attachment; filename="{}"'.format(filepath.split("/")[-1])
-            #return response
+            # response['Content-Disposition'] = 'attachment; filename="{}"'.format(filepath.split("/")[-1])
+            # return response
 
 
 def generate_elements(path):
@@ -36,6 +38,8 @@ def generate_elements(path):
 
 
 class List(View):
+    """Render list of items for each directory and file in directory."""
+
     content = dict()
     template = 'main.html'
 
@@ -45,12 +49,14 @@ class List(View):
         path = kwargs['look_path']
         dir_content = parser.parse_directory(kwargs['look_path'])
         if user.is_anonymous:
-            self.content['files'] = []  # dont show files to user
+            self.content['files'] = []  # dont show files to user
         else:
             self.content['files'] = dir_content[1]
         self.content['path'] = path
         self.content['path_tail'] = "..." + str(path)[-16:]
         self.content['path_elements'] = generate_elements(str(path))
+        self.content['last_path_element'] = self.content['path_elements'][-1][
+            1]
         self.content['directories'] = dir_content[0]
         self.content['loadtime'] = "%d" % ((time() - stopwatch) * 1000)
         self.content["current_path"] = path
