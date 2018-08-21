@@ -41,7 +41,7 @@
         {% for file in files %}
         <a href="{% url "file_server" file.get_full_path %}" class="list-group-item {% if user.is_anonymous %}disabled{% endif %}">
           {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
-
+            {% if not user.is_anonymous %}
               {% if file.get_media_type == "Video" %}
                   <p id="spoiler_{{ file }}" style="display:none;clear:both">
                       <video height="480" width="640" preload="none" controls>
@@ -70,10 +70,10 @@
                   </p>
               {% endif %}
 
-            </span>
-            <span class="badge file" title="Click to show/hide content" onmouseover="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
-              <span class="glyphicon glyphicon-search"></span>
-            </span>
+              <span class="badge file" title="Click to show/hide content" onmouseover="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
+                <span class="glyphicon glyphicon-search"></span>
+              </span>
+            {% endif %}
           {% endif %}
             <span class="glyphicon {{ file.media_type.image }}"></span> {{ file }}
 
