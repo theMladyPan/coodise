@@ -1,9 +1,15 @@
 $(document).ready(function(){
-  /* $(".badge").hover(
+
+  $('.badge').click(
+    // when clicked on badge inside link
     function(){
-      $(this).parent().css("pointer-events: none;");
-    }, function(){
-      $(this).parent().removeClass("disabled");
+      // console.log("Clicked on",this);
+      $(this).parent().click(
+        // overide links click functionality and do not redirect
+        function(){
+          return false;
+        }
+      )
     }
-  );*/
+  )
 });
