@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block body%}
-  <div class="container" style="margin-top:100px">
+  <div id="mainContainer" class="container">
 
     <div class="panel panel-default">
       <div class="panel-body">
@@ -33,32 +33,32 @@
                   <span class="glyphicon glyphicon-folder-open"></span> {{ directory }}
                 </a>
             {% else %}
-                <a href="/"><span class="glyphicon glyphicon-folder-open"></span> {{ directory }}</a>
+                <a href="{% url "index" %}"><span class="glyphicon glyphicon-folder-open"></span> {{ directory }}</a>
             {% endif %}
           {% endif %}
         {% endfor %}
 
         {% for file in files %}
-        <a href="/file/{{ file.get_full_path }}/" class="list-group-item {% if user.is_anonymous %}disabled{% endif %}">
+        <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}">
           {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
-
+            {% if not user.is_anonymous %}
               {% if file.get_media_type == "Video" %}
                   <p id="spoiler_{{ file }}" style="display:none;clear:both">
                       <video height="480" width="640" preload="none" controls>
-                          <source src="/file/{{ file.get_full_path }}/">
+                          <source src="{% url "file_server" file.get_full_path %}">
                           Your brower is piece of crap
                       </video>
                   </p>
               {% elif file.get_media_type == "Audio" %}
                   <p id="spoiler_{{ file }}" style="display:none;clear:both">
                       <audio preload="none" controls>
-                          <source src="/file/{{ file.get_full_path }}/">
+                          <source src="{% url "file_server" file.get_full_path %}">
                           Your brower is piece of crap
                       </audio>
                   </p>
               {% elif file.get_media_type == "Picture" %}
                   <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                      <img src="/file/{{ file.get_full_path }}/">
+                      <img src="{% url "file_server" file.get_full_path %}">
                   </p>
               {% elif file.get_media_type == "Text" %}
                   <p id="spoiler_{{ file }}" style="display:none;clear:both">
@@ -70,14 +70,14 @@
                   </p>
               {% endif %}
 
-            </span>
+              <span class="badge spoiler" title="Click to show/hide content" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_{{ file }}') .style.display='none'}">
+                <span class="glyphicon glyphicon-search"></span>
+              </span>
+            {% endif %}
           {% endif %}
             <span class="glyphicon {{ file.media_type.image }}"></span> {{ file }}
 
-            <span class="badge file" title="Click to show/hide content" onmouseover="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
-              <span class="glyphicon glyphicon-search"></span>
-              </a>
-            </span>
+            </a>
         {% endfor %}
     </div>
 
@@ -97,18 +97,20 @@
 {% block navbar_content %}
   <ul class="nav navbar-nav">
     {% for element in path_elements %}
-      <li><a href="/path/{{ element.0 }}">{{ element.1 }}</a></li>
+      <li><a href="{% url "path" element.0 %} ">{{ element.1 }}</a></li>
     {% endfor %}
   </ul>
 
   <ul class="nav navbar-nav navbar-right">
     {% if user.is_anonymous %}
-      <li><a href="/login/{{ current_path }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <li><a href="{% url "login" current_path %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
     {% else %}
       <li><a>Hi {{ user }}!</a></li>
-      <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+      {% if user.is_staff %}
+        <li><a href="/admin"><span class="glyphicon glyphicon-user"></span> Admin panel</a></li>
+      {% endif %}
+      <li><a href="{% url "logout" %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
     {% endif %}
-      <li><a href="/admin"><span class="glyphicon glyphicon-user"></span> Admin</a></li>
   </ul>
 
   <form class="navbar-form navbar-right">

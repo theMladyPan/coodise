@@ -12,6 +12,8 @@ __pycache__/
 # Cloud files
 Cloud
 
+db.sqlite3
+
 # Distribution / packaging
 .Python
 build/

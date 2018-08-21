@@ -1,9 +1,27 @@
 $(document).ready(function(){
-  /* $(".badge").hover(
+
+  $('.file_content.disabled').click(
     function(){
-      $(this).parent().css("pointer-events: none;");
-    }, function(){
-      $(this).parent().removeClass("disabled");
+      return false;
     }
-  );*/
+  );
+
+  $('.badge.spoiler').click(
+    // when clicked on badge inside link
+    function(event){
+      // console.log("Clicked on",this);
+       $(this).parent().click(
+        // overide links click functionality and do not redirect
+        function(event){
+          event.preventDefault();
+        }
+      ).dblclick(
+        function(){
+          window.location = this.href;
+          return false;
+        }
+      );
+    }
+  );
+
 });

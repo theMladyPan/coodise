@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body%}
+{% load crispy_forms_tags %}
+
+
+{% block bootstrap3_extra_script %}
+  <script src={% static "js/navbar.js" %}></script>
+  <script src={% static "js/main.js" %}></script>
+{% endblock %}
 
 {% block content %}
-  <h2>Unauthorized access. Please login.</h2>
-    {% csrf_token %}
-    {# {% crispy form %} #}
+
+  <div id="mainContainer" class="container">
+    {% crispy login_form %}
+  </div>
 {% endblock %}
 
 {% endblock %}
