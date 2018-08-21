@@ -5,13 +5,14 @@
 {% block bootstrap3_extra_script %}
   <script src={% static "js/navbar.js" %}></script>
   <script src={% static "js/content_filter.js" %}></script>
+  <script src={% static "js/main.js" %}></script>
 {% endblock %}
 
 {% block title %}
   {% if webpage_title %}
     {{ webpage_title }}
   {% else %}
-    {{ path_tail }}
+    Coodise::{{ last_path_element }}
   {% endif %}
 {% endblock %}
 
@@ -20,7 +21,7 @@
 
     <div class="panel panel-default">
       <div class="panel-body">
-        Content of {% if last_path_element %}{{ last_path_element }}{% else %}root directory{% endif %}
+        <h4>Content of {% if last_path_element %}{{ last_path_element }}{% else %}Coodise{% endif %}</h4>
       </div>
     </div>
 
@@ -29,25 +30,24 @@
           {% if path or not directory.is_parent %}
             {% if directory.relative_path %}
                 <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item">
-                  <img src="{% static "images/" %}{{ directory.media_type.image }}" height="33" width="33">{{ directory }}
+                  <span class="glyphicon glyphicon-folder-open"></span> {{ directory }}
                 </a>
             {% else %}
-                <a href="/"><img src="{% static "images/" %}{{ directory.media_type.image }}" height="33" width="33"  class="list-group-item">{{ directory }}</a>
+                <a href="/"><span class="glyphicon glyphicon-folder-open"></span> {{ directory }}</a>
             {% endif %}
           {% endif %}
         {% endfor %}
 
         {% for file in files %}
+        <a href="/file/{{ file.get_full_path }}/" class="list-group-item {% if user.is_anonymous %}disabled{% endif %}">
           {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
-              <a title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
-                <img src="{% static "images/play.png" %}" width="30">
-              </a>
+
               {% if file.get_media_type == "Video" %}
                   <p id="spoiler_{{ file }}" style="display:none;clear:both">
                       <video height="480" width="640" preload="none" controls>
                           <source src="/file/{{ file.get_full_path }}/">
                           Your brower is piece of crap
-                      </video>'demo/
+                      </video>
                   </p>
               {% elif file.get_media_type == "Audio" %}
                   <p id="spoiler_{{ file }}" style="display:none;clear:both">
@@ -70,12 +70,15 @@
                   </p>
               {% endif %}
 
+            </span>
           {% else %}
             <img src="{% static "images/blank.png" %}" width="30">
           {% endif %}
-            <a href="/file/{{ file.get_full_path }}/" class="list-group-item"><img src="{% static "images/" %}{{ file.media_type.image }}" height="33" width="33">{{ file }}
+            <span class="glyphicon {{ file.media_type.image }}"></span> {{ file }}
+
+                        <span class="badge file" title="Click to show/hide content" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_%s') .style.display='none'}">
+                          <span class="glyphicon glyphicon-search"></span>
             </a>
-          </li>
         {% endfor %}
     </div>
 
@@ -101,10 +104,12 @@
 
   <ul class="nav navbar-nav navbar-right">
     {% if user.is_anonymous %}
-      <li><a href="/login/{{ current_path }}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+      <li><a href="/login/{{ current_path }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
     {% else %}
-      <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+      <li><a>Hi {{ user }}!</a></li>
+      <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
     {% endif %}
+      <li><a href="/admin"><span class="glyphicon glyphicon-user"></span> Admin</a></li>
   </ul>
 
   <form class="navbar-form navbar-right">

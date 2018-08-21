@@ -40,19 +40,19 @@ class MediaType:
     def deduce_image(self):
         if self.type:
             if self.type == "Picture":  # TODO: implement other types
-                self.image = "image.png"
+                self.image = "glyphicon-picture"
             elif self.type == "Video":
-                self.image = "video.png"
+                self.image = "glyphicon-facetime-video"
             elif self.type == "Folder":
-                self.image = "folder.png"
+                self.image = "glyphicon-folder-open"
             elif self.type == "Audio":
-                self.image = "audio.png"
+                self.image = "glyphicon-music"
             elif self.type == "Image":
-                self.image = "disc.png"
+                self.image = "glyphicon-floppy-disk"
             else:
-                self.image = "doc.png"
+                self.image = "glyphicon-file"
         else:
-            self.image = "doc.png"
+            self.image = "glyphicon-file"
 
 
 class File:

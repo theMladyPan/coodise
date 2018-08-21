@@ -5,8 +5,6 @@ from django.shortcuts import render
 from django.views import View
 from time import time
 from ..utils import parser
-from django.views.static import serve
-import os
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
 
@@ -20,12 +18,15 @@ class Serve(View):
         if user.is_anonymous:
             return redirect("/")
         else:
-            return serve(request, os.path.basename(filepath),
-                         os.path.dirname(filepath))
-            # with open(filepath, "rb") as wish_file:
-            #    response = HttpResponse(wish_file.read(), content_type='application')
-            # response['Content-Disposition'] = 'attachment; filename="{}"'.format(filepath.split("/")[-1])
-            # return response
+            # return serve(request, os.path.basename(filepath),
+            #              os.path.dirname(filepath))
+            with open(filepath, "rb") as wish_file:
+                response = HttpResponse(
+                    wish_file.read(), content_type='application')
+            response[
+                'Content-Disposition'] = 'attachment; filename="{}"'.format(
+                    filepath.split("/")[-1])
+            return response
 
 
 def generate_elements(path):
@@ -45,13 +46,11 @@ class List(View):
 
     def get(self, request, *args, **kwargs):
         stopwatch = time()
-        user = request.user
+
         path = kwargs['look_path']
         dir_content = parser.parse_directory(kwargs['look_path'])
-        if user.is_anonymous:
-            self.content['files'] = []  # dont show files to user
-        else:
-            self.content['files'] = dir_content[1]
+        self.content['files'] = dir_content[1]
+        self.content['user'] = request.user
         self.content['path'] = path
         self.content['path_tail'] = "..." + str(path)[-16:]
         self.content['path_elements'] = generate_elements(str(path))
