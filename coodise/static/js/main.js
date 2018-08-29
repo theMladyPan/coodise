@@ -9,7 +9,6 @@ $(document).ready(function(){
   $('.badge.spoiler').click(
     // when clicked on badge inside link
     function(event){
-      // console.log("Clicked on",this);
        $(this).parent().click(
         // overide links click functionality and do not redirect
         function(event){

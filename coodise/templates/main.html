@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 {% load static %}
+{% load custom_filters %}
 
 {% block bootstrap3_extra_script %}
   <script src={% static "js/navbar.js" %}></script>
@@ -39,47 +40,60 @@
         {% endfor %}
 
         {% for file in files %}
-        <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}">
-          {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
-            {% if not user.is_anonymous %}
-              {% if file.get_media_type == "Video" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                      <video height="480" width="640" preload="none" controls>
-                          <source src="{% url "file_server" file.get_full_path %}">
-                          Your brower is piece of crap
-                      </video>
-                  </p>
-              {% elif file.get_media_type == "Audio" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                      <audio preload="none" controls>
-                          <source src="{% url "file_server" file.get_full_path %}">
-                          Your brower is piece of crap
-                      </audio>
-                  </p>
-              {% elif file.get_media_type == "Picture" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                      <img src="{% url "file_server" file.get_full_path %}">
-                  </p>
-              {% elif file.get_media_type == "Text" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                    <span style="white-space: pre-line">
-                      <code>
-                        {{ file.get_content }}
-                      </code>
-                    </span>
-                  </p>
+          <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}">
+            {% if file.get_media_type %} {# it is some kind of media, so render peek badge #}
+              {% if not user.is_anonymous %}
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn badge spoiler" data-toggle="modal" data-target="#modal_{{ file|idFriendly }}">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
               {% endif %}
-
-              <span class="badge spoiler" title="Click to show/hide content" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_{{ file }}') .style.display='none'}">
-                <span class="glyphicon glyphicon-search"></span>
-              </span>
             {% endif %}
-          {% endif %}
             <span class="glyphicon {{ file.media_type.image }}"></span> {{ file }}
+          </a>
 
-            </a>
         {% endfor %}
     </div>
+
+    <div class="modals">
+      {% for file in files %}
+      {# prepare modal window #}
+        {% if file.get_media_type %} {# it is some kind of media, so render peek badge #}
+          {% if not user.is_anonymous %}
+            <div class="modal fade" id="modal_{{ file|idFriendly }}" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Preview of {{ file }}</h4>
+                  </div>
+                  <div class="modal-body">
+                    {% if file.get_media_type == "Video" %}
+                      <video height="480" width="640" preload="none" controls>
+                          <source src="{% url "file_server" file.get_full_path %}">
+                      </video>
+                    {% elif file.get_media_type == "Audio" %}
+                      <audio preload="none" controls>
+                          <source src="{% url "file_server" file.get_full_path %}">
+                      </audio>
+                    {% elif file.get_media_type == "Picture" %}
+                      <img src="{% url "file_server" file.get_full_path %}"> {# TODO: Rewrite with Ajax #}
+                    {% elif file.get_media_type == "Text" %}
+                      <span style="white-space: pre-line">
+                        <code>
+                          {{ file.get_content }}
+                        </code>
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
 
   {% if loadtime %}
     <div class="panel panel-default">
@@ -88,8 +102,6 @@
       </div>
     </div>
   {% endif %}
-
-  </div>
 
 {% endblock %}
 
