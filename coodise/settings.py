@@ -121,3 +121,12 @@ STATICFILES_DIRS = (
 # Put folder with MEDIA in here:
 
 MEDIA_DIR = 'Cloud'
+
+MEDIA_ICONS = {
+    "Picture": "glyphicon-picture",
+    "Video": "glyphicon-facetime-video",
+    "Folder": "glyphicon-folder-open",
+    "Audio": "glyphicon-music",
+    "Image": "glyphicon-floppy-disk",
+    "Default": "glyphicon-file",
+}

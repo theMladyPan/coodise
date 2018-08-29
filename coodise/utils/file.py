@@ -3,8 +3,9 @@
 import os
 from django.conf import settings
 
+
 class MediaType:
-    def __init__(self, filename = "", type = None):
+    def __init__(self, filename="", type=None):
         if type is not None:
             self.type = type
         else:
@@ -17,46 +18,34 @@ class MediaType:
 
     def yield_type_from_filename(self, filename):
         extension = filename.split(".")[-1].lower()
+        MediaTypes = ["Picture", "Video", "Audio", "Text", "Image"]
         d_extensions = dict()
-        d_extensions["image"] = ["iso", "img"]
-        d_extensions["video"] = ["webm", "avi", "mov", "mkv","mp4","3gp","divx","mpeg","mpg"]
-        d_extensions["picture"] = ["png", "jpg", "jpeg","tif","tiff","bmp","gif"]
-        d_extensions["audio"] = ["mp3","flac","ogg","wav","wma"]
-        d_extensions["text"] = ["txt","py", "pyw", "cpp","log", "srt", "c", "m", "h", "hpp"]  # TODO: extend this list
+        d_extensions["Image"] = ["iso", "img"]
+        d_extensions["Video"] = [
+            "webm", "avi", "mov", "mkv", "mp4", "3gp", "divx", "mpeg", "mpg"
+        ]
+        d_extensions["Picture"] = [
+            "png", "jpg", "jpeg", "tif", "tiff", "bmp", "gif"
+        ]
+        d_extensions["Audio"] = ["mp3", "flac", "ogg", "wav", "wma"]
+        d_extensions["Text"] = [
+            "txt", "py", "pyw", "cpp", "log", "srt", "c", "m", "h", "hpp"
+        ]  # TODO: extend this list
 
-        if extension in d_extensions["picture"]:  # TODO: implement other types
-            return "Picture"
-        elif extension in d_extensions["video"]:
-            return "Video"
-        elif extension in d_extensions["audio"]:
-            return "Audio"
-        elif extension in d_extensions["text"]:
-            return "Text"
-        elif extension in d_extensions["image"]:
-            return "Image"
-        else:
-            return None
+        for type in MediaTypes:
+            if extension in d_extensions[type]:  # TODO: implement other types
+                return type
+        return None
 
     def deduce_image(self):
-        if self.type:
-            if self.type == "Picture":  # TODO: implement other types
-                self.image = "glyphicon-picture"
-            elif self.type == "Video":
-                self.image = "glyphicon-facetime-video"
-            elif self.type == "Folder":
-                self.image = "glyphicon-folder-open"
-            elif self.type == "Audio":
-                self.image = "glyphicon-music"
-            elif self.type == "Image":
-                self.image = "glyphicon-floppy-disk"
-            else:
-                self.image = "glyphicon-file"
+        if self.type in settings.MEDIA_ICONS.keys():
+            self.image = settings.MEDIA_ICONS[self.type]
         else:
-            self.image = "glyphicon-file"
+            self.image = settings.MEDIA_ICONS["Default"]
 
 
 class File:
-    def __init__(self, path, name, is_parent = False):
+    def __init__(self, path, name, is_parent=False):
         self.name = name
         if is_parent:
             self.full_path = "/".join(path.split('/')[:-1])
@@ -67,6 +56,7 @@ class File:
         self.is_file = os.path.isfile(self.full_path)
         self.media_type = MediaType(name)  # media, music, video ...
         self.relative_path = self.full_path.split(settings.MEDIA_DIR)[1]
+
     def __repr__(self):
         return self.name
 
