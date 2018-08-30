@@ -12,15 +12,12 @@
   <link rel="shortcut icon" type="image/png" href="{% static "images/coodise.png" %}"/>
   <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}"/>
   {% block extra_css %}{% endblock %}
+
 {% endblock %}
 
 {% block bootstrap3_content %}
 
-  {% autoescape off %}
-    {% bootstrap_messages %}
-  {% endautoescape %}
-
-  <nav id="topNavbar" class="navbar navbar-default navbar-fixed-top">
+  <nav id="topNavbar" class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="/">Coodise</a>

@@ -7,7 +7,6 @@ $(document).ready(
 
     // padding of top of webpage
     var navHeight = $("#topNavbar").height() + 50;
-    $("#mainContainer").css("margin-top",navHeight+"px");
-    console.log("margin-top:"+navHeight+"px");
+    // $("#mainContainer").css("margin-top",navHeight+"px");
   }
 );

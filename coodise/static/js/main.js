@@ -9,6 +9,7 @@ $(document).ready(function(){
   $('.badge.spoiler').click(
     // when clicked on badge inside link
     function(event){
+       $(this).parent().prop("title","Doubleclick to open link");
        $(this).parent().click(
         // overide links click functionality and do not redirect
         function(event){
