@@ -13,4 +13,8 @@
     Create empty file
     <span class="badge"><span class="glyphicon glyphicon-file"></span></span>
   </button>
+  <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal_create_empty_file">
+    Upload file
+    <span class="badge"><span class="glyphicon glyphicon-cloud-upload"></span></span>
+  </button>
 </div>

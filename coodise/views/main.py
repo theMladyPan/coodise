@@ -52,8 +52,9 @@ class List(View):
         stopwatch = time()
 
         path = kwargs['look_path']
-        dir_content = parser.parse_directory(kwargs['look_path'])
-        self.content['have_access_for_writing'] = os.access(path, os.W_OK)
+        dir_content = parser.parse_directory(path)
+        self.content['have_access_for_writing'] = os.access(
+            os.path.join(settings.MEDIA_DIR, path), os.W_OK)
         self.content["create_dir_form"] = CreateDirForm
         self.content['files'] = dir_content[1]
         self.content['user'] = request.user
@@ -71,10 +72,10 @@ class List(View):
     def post(self, request, *args, **kwargs):
         new_dir_name = request.POST["dir_name"]
         path = kwargs['look_path']
-        media_dir = os.path.join(settings.BASE_DIR, settings.MEDIA_DIR)
+        current_dir = os.path.join(
+            os.path.join(settings.BASE_DIR, settings.MEDIA_DIR), path)
         try:
-            os.makedirs(os.path.join(media_dir, new_dir_name))
-            messages.info(request, path + new_dir_name)
+            os.makedirs(os.path.join(current_dir, new_dir_name))
             messages.success(request,
                              "Directory {} created.".format(new_dir_name))
         except OSError:
