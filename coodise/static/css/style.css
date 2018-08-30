@@ -1,59 +1,11 @@
-body
+.preview {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+}
+
+.list-group-item
 {
-color:#fff;
-background-color:#333;
-font-weight:bold;
-}
-
-div {
-  width: 100%;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  font: 200 20px/1.5 Courier;
-  text-shadow: 0px 1px 0px #999, 1px 2px 0px #555, 2px 3px 0px #222;
-
-}
-
-code {
-  color:#bfb;
-  font: 200 16px/1 Courier New;
-}
-
-li a {
-  clear:both;
-  color:#fff;
-  text-decoration: none;
-  display:inline;
-  width: 100%;
-
-  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
-  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
-  transition: font-size 0.3s ease, background-color 0.3s ease;
-}
-
-li a:hover {
-  font-size: 26px;
-  background: #555;
-}
-
-img {vertical-align:middle;}
-
-h1 {
-	color:#fff;
-	text-shadow: 1px 1px 0px #999, 2px 2px 0px #777, 3px 3px 0px #555, 4px 4px 0px #333, 5px 5px 0px #111;
-	font: 40px 'Times';
-}
-h3 {
-	color:#000;
-        text-shadow: 0px 1px 0px #111, 1px 2px 0px #222, 2px 3px 0px #333;
-        font: 16px 'Times';
+  padding: 15px 15px;
 }

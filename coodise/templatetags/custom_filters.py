@@ -2,10 +2,31 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter(name="idFriendly")
 def idFriendly(value):
-    safe=str(value)
-    bannedChars=""" .'",#&@^<>:;"""
+    """Remove chars not suitable fod id element."""
+    safe = str(value)
+    bannedChars = """ .'",#&@^<>:;()"""
     for char in bannedChars:
-        safe = safe.replace(char,"_")
+        safe = safe.replace(char, "_")
+    return safe
+
+
+@register.filter(name="htmlFriendly")
+def htmlFriendly(value):
+    """Replace HTML tags with &; alternatives."""
+    safe = str(value)
+    safe = safe.replace("<", "&lt;")
+    safe = safe.replace(">", "&gt;")
+    safe = safe.replace("\t", "    ")
+    safe = safe.replace(" ", "&nbsp;")
+    return safe
+
+
+@register.filter(name="tabsToSpaces")
+def tabsToSpaces(value):
+    """Replace HTML tags with &; alternatives."""
+    safe = str(value)
+    safe = safe.replace("\t", "    ")
     return safe

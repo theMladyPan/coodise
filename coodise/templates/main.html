@@ -58,7 +58,7 @@
     <div class="modals">
       {% for file in files %}
       {# prepare modal window #}
-        {% if file.get_media_type %} {# it is some kind of media, so render peek badge #}
+        {% if file.get_media_type %} {# it is some kind of media, so render modal window #}
           {% if not user.is_anonymous %}
             <div class="modal fade" id="modal_{{ file|idFriendly }}" role="dialog">
               <div class="modal-dialog">
@@ -69,20 +69,18 @@
                   </div>
                   <div class="modal-body">
                     {% if file.get_media_type == "Video" %}
-                      <video height="480" width="640" preload="none" controls>
+                      <video class="preview" height=480px preload="none" controls>
                           <source src="{% url "file_server" file.get_full_path %}">
                       </video>
                     {% elif file.get_media_type == "Audio" %}
-                      <audio preload="none" controls>
+                      <audio class="preview" preload="none" controls>
                           <source src="{% url "file_server" file.get_full_path %}">
                       </audio>
                     {% elif file.get_media_type == "Picture" %}
-                      <img src="{% url "file_server" file.get_full_path %}"> {# TODO: Rewrite with Ajax #}
+                      <img class="preview" src="{% url "file_server" file.get_full_path %}"> {# TODO: Rewrite with Ajax #}
                     {% elif file.get_media_type == "Text" %}
-                      <span style="white-space: pre-line">
-                        <code>
-                          {{ file.get_content }}
-                        </code>
+                      <span class="preview" style="white-space: pre-line">
+                        <pre class="pre-scrollable">{{ file.get_content|tabsToSpaces }}</pre>
                       </span>
                     {% endif %}
                   </div>
