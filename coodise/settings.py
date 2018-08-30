@@ -6,7 +6,6 @@ from os import path
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -16,7 +15,10 @@ SECRET_KEY = 'l*aw1_q)q@*5_!+@d62zq%**!(tdub6s3#)f!irfl9pg=-qp6o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.100", "188.121.161.140", "127.0.0.1", "192.168.1.10", "localhost"]
+ALLOWED_HOSTS = [
+    "192.168.1.100", "188.121.161.140", "127.0.0.1", "192.168.1.10",
+    "localhost"
+]
 
 # Application definition
 
@@ -30,7 +32,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bootstrap3',
     'coodise',
-
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'coodise.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -76,25 +76,27 @@ DATABASES = {
 
 DEFAULT_CHARSET = "utf-8"
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -109,17 +111,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images);
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-      os.path.join(BASE_DIR, "coodise/static/"),
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "coodise/static/"), )
+
+###############################################################
+# Coodise custom settings
 
 # Put folder with MEDIA in here:
-
 MEDIA_DIR = 'Cloud'
 
 MEDIA_ICONS = {
@@ -130,3 +131,15 @@ MEDIA_ICONS = {
     "Image": "glyphicon-floppy-disk",
     "Default": "glyphicon-file",
 }
+
+MEDIA_TYPES = ["Picture", "Video", "Audio", "Text", "Image"]
+
+# list of lowercase file extensions
+FILE_EXTENSIONS = {
+    "Image": ["iso", "img"],
+    "Video":
+    ["webm", "avi", "mov", "mkv", "mp4", "3gp", "divx", "mpeg", "mpg"],
+    "Picture": ["png", "jpg", "jpeg", "tif", "tiff", "bmp", "gif"],
+    "Audio": ["mp3", "flac", "ogg", "wav", "wma"],
+    "Text": ["txt", "py", "pyw", "cpp", "log", "srt", "c", "m", "h", "hpp"],
+}  # TODO: extend this list

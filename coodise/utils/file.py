@@ -5,6 +5,8 @@ from django.conf import settings
 
 
 class MediaType:
+    """Defines utilities for file media type."""
+
     def __init__(self, filename="", type=None):
         if type is not None:
             self.type = type
@@ -18,22 +20,9 @@ class MediaType:
 
     def yield_type_from_filename(self, filename):
         extension = filename.split(".")[-1].lower()
-        MediaTypes = ["Picture", "Video", "Audio", "Text", "Image"]
-        d_extensions = dict()
-        d_extensions["Image"] = ["iso", "img"]
-        d_extensions["Video"] = [
-            "webm", "avi", "mov", "mkv", "mp4", "3gp", "divx", "mpeg", "mpg"
-        ]
-        d_extensions["Picture"] = [
-            "png", "jpg", "jpeg", "tif", "tiff", "bmp", "gif"
-        ]
-        d_extensions["Audio"] = ["mp3", "flac", "ogg", "wav", "wma"]
-        d_extensions["Text"] = [
-            "txt", "py", "pyw", "cpp", "log", "srt", "c", "m", "h", "hpp"
-        ]  # TODO: extend this list
 
-        for type in MediaTypes:
-            if extension in d_extensions[type]:  # TODO: implement other types
+        for type in settings.MEDIA_TYPES:
+            if extension in settings.FILE_EXTENSIONS[type]:
                 return type
         return None
 
@@ -45,6 +34,8 @@ class MediaType:
 
 
 class File:
+    """Define File class with meta attributes such as media type etc."""
+
     def __init__(self, path, name, is_parent=False):
         self.name = name
         if is_parent:
@@ -58,6 +49,7 @@ class File:
         self.relative_path = self.full_path.split(settings.MEDIA_DIR)[1]
 
     def __repr__(self):
+        """Return string representation of class."""
         return self.name
 
     def get_full_path(self):
