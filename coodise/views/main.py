@@ -7,6 +7,7 @@ from time import time
 from ..utils import parser
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
+import os
 
 
 class Serve(View):
@@ -49,6 +50,7 @@ class List(View):
 
         path = kwargs['look_path']
         dir_content = parser.parse_directory(kwargs['look_path'])
+        self.content['have_access_for_writing'] = os.access(path, os.W_OK)
         self.content['files'] = dir_content[1]
         self.content['user'] = request.user
         self.content['path'] = path

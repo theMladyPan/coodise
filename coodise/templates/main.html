@@ -2,6 +2,7 @@
 {% load bootstrap3 %}
 {% load static %}
 {% load custom_filters %}
+{% load crispy_forms_tags %}
 
 {% block bootstrap3_extra_script %}
   <script src={% static "js/navbar.js" %}></script>
@@ -21,16 +22,18 @@
   <div id="mainContainer" class="container">
 
     {% autoescape off %}
-      {% bootstrap_messages %}
+    {% bootstrap_messages %}
     {% endautoescape %}
-    
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <h4>Content of {% if last_path_element %}{{ last_path_element }}{% else %}Coodise{% endif %}</h4>
-      </div>
-    </div>
 
-    <div class="list-group">
+    <div class="col-lg-8 col-md-8 col-sm-12">
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h4>Content of {% if last_path_element %}{{ last_path_element }}{% else %}Coodise{% endif %}</h4>
+        </div>
+      </div>
+
+      <div class="list-group">
         {% for directory in directories %}
           {% if path or not directory.is_parent %}
             {% if directory.relative_path %}
@@ -57,9 +60,57 @@
           </a>
 
         {% endfor %}
+      </div>
+
     </div>
 
+    <!-- Tools DIV-->
+    <div class="col-lg-4 col-md-4 col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h4>Tools</h4>
+        </div>
+      </div>
+
+      <div class="list-group">
+        {% if have_access_for_writing %}
+            <!-- TODO Tuto bude tlačidlo na otvorenie modálneho formuláru na vytvorenie priečinka -->
+            <button type="button" class="btn list-group-item" data-toggle="modal" data-target="#modal_create_dir">
+              Create new directory
+              <!-- <span class="glyphicon glyphicon-search"></span>-->
+            </button>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if loadtime %}
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            loaded in {{ loadtime }}ms
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
     <div class="modals">
+
+      {% if have_access_for_writing %}
+        <div class="modal fade" id="modal_create_dir" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create new directory in current one</h4>
+              </div>
+              <div class="modal-body">
+                {% crispy create_dir_form %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
       {% for file in files %}
       {# prepare modal window #}
         {% if file.get_media_type %} {# it is some kind of media, so render modal window #}
@@ -96,15 +147,7 @@
       {% endfor %}
     </div>
 
-
-  {% if loadtime %}
-    <div class="panel panel-default">
-      <div class="panel-body">
-        loaded in {{ loadtime }}ms
-      </div>
-    </div>
-  {% endif %}
-
+  </div>
 {% endblock %}
 
 

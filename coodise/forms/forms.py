@@ -16,3 +16,21 @@ class LoginForm(forms.Form):
 
     user_name = forms.CharField(label='Your name', max_length=100)
     password = forms.CharField(widget=forms.PasswordInput())
+
+class CreateDirForm(forms.Form):
+    dir_name = forms.CharField(label='Name for new directory', max_length=255)
+
+    def __init__(self, *args, **kwargs):
+        super(CreateDirForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-create-dir'
+        self.helper.form_class = 'blueForms'
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Create'))
+
+    def clean(self):
+        cleaned_data = super(CreateDirForm, self).clean()
+        return cleaned_data
+
+    def save(self):
+        cleaned_data = super(CreateDirForm, self).clean()
