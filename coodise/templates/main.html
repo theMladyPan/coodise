@@ -21,9 +21,6 @@
 {% block body%}
   <div id="mainContainer" class="container">
 
-    {% autoescape off %}
-      {% bootstrap_messages %}
-    {% endautoescape %}
 
     <div class="col-lg-8 col-md-8 col-sm-12">
 
@@ -50,8 +47,7 @@
           <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}"{% if user.is_anonymous %} title="You need to login to access {{ file }}"{% endif %}>
             {% if file.get_media_type %} {# it is some kind of media, so render peek badge #}
               {% if not user.is_anonymous %}
-                <!-- Trigger the modal with a button -->
-                <button type="button" class="btn badge spoiler" data-toggle="modal" data-target="#modal_{{ file|idFriendly }}">
+                <button type="button" class="btn badge spoiler" data-toggle="modal" data-target="#modal_{{ file|slugify }}">
                   <span class="glyphicon glyphicon-search"></span>
                 </button>
               {% endif %}
@@ -64,10 +60,8 @@
 
     </div>
 
-    <!-- Tools DIV-->
     <div class="col-lg-4 col-md-4 col-sm-12">
       {% include "tools.html" %}
-
     </div>
 
     {% if loadtime %}
@@ -91,7 +85,11 @@
                 <h4 class="modal-title">Create new directory in current one</h4>
               </div>
               <div class="modal-body">
-                {% crispy create_dir_form %}
+                {% if not user.is_anonymous %}
+                  {% crispy create_dir_form %}
+                {% else %}
+                  Please log in first to create subdirectories.
+                {% endif %}
               </div>
             </div>
           </div>
@@ -102,7 +100,7 @@
       {# prepare modal window #}
         {% if file.get_media_type %} {# it is some kind of media, so render modal window #}
           {% if not user.is_anonymous %}
-            <div class="modal fade" id="modal_{{ file|idFriendly }}" role="dialog">
+            <div class="modal fade" id="modal_{{ file|slugify }}" role="dialog">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">

@@ -1,8 +1,14 @@
+
+{% load bootstrap3 %}
 <div class="panel panel-default">
   <div class="panel-body">
     <h4>Tools</h4>
   </div>
 </div>
+
+{% autoescape off %}
+  {% bootstrap_messages %}
+{% endautoescape %}
 
 <div class="list-group">
   <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal_create_dir">

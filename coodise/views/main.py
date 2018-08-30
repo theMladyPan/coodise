@@ -67,6 +67,9 @@ class List(View):
         self.content['loadtime'] = "%d" % ((time() - stopwatch) * 1000)
         self.content["current_path"] = path
 
+        if not self.content['have_access_for_writing']:
+            messages.warning(request, "Directory is not available for writing")
+
         return render(request, self.template, self.content)
 
     def post(self, request, *args, **kwargs):
