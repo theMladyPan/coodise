@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponse, HttpResponseRedirect  # if redirecting after successfull POST
+from django.http import HttpResponse  # if redirecting after successfull POST
 from django.shortcuts import render
 from django.views import View
 from time import time
 from ..utils import parser
-from django.contrib.auth import authenticate
+from .. import settings
 from django.shortcuts import redirect
+from ..forms.forms import CreateDirForm
+from django.urls import reverse
+from django.contrib import messages
 import os
 
 
@@ -51,6 +54,7 @@ class List(View):
         path = kwargs['look_path']
         dir_content = parser.parse_directory(kwargs['look_path'])
         self.content['have_access_for_writing'] = os.access(path, os.W_OK)
+        self.content["create_dir_form"] = CreateDirForm
         self.content['files'] = dir_content[1]
         self.content['user'] = request.user
         self.content['path'] = path
@@ -63,3 +67,19 @@ class List(View):
         self.content["current_path"] = path
 
         return render(request, self.template, self.content)
+
+    def post(self, request, *args, **kwargs):
+        new_dir_name = request.POST["dir_name"]
+        path = kwargs['look_path']
+        media_dir = os.path.join(settings.BASE_DIR, settings.MEDIA_DIR)
+        try:
+            os.makedirs(os.path.join(media_dir, new_dir_name))
+            messages.info(request, path + new_dir_name)
+            messages.success(request,
+                             "Directory {} created.".format(new_dir_name))
+        except OSError:
+            messages.error(
+                request,
+                "Directory {} not created. Perhaps there is already existing directory or read only filesystem.".
+                format(new_dir_name))
+        return redirect(reverse("path", args=(path, )))

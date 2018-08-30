@@ -1,0 +1,23 @@
+<ul class="nav navbar-nav">
+  {% for element in path_elements %}
+    <li><a href="{% url "path" element.0 %} ">{{ element.1 }}</a></li>
+  {% endfor %}
+</ul>
+
+<ul class="nav navbar-nav navbar-right">
+  {% if user.is_anonymous %}
+    <li><a href="{% url "login" current_path %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+  {% else %}
+    <li><a>Hi {{ user }}!</a></li>
+    {% if user.is_staff %}
+      <li><a href="/admin"><span class="glyphicon glyphicon-user"></span> Admin panel</a></li>
+    {% endif %}
+    <li><a href="{% url "logout" %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+  {% endif %}
+</ul>
+
+<form class="navbar-form navbar-right">
+  <div class="input-group">
+    <input type="text" class="form-control" id="filterInput" placeholder="Filter..." name="search">
+  </div>
+</form>

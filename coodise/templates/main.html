@@ -22,7 +22,7 @@
   <div id="mainContainer" class="container">
 
     {% autoescape off %}
-    {% bootstrap_messages %}
+      {% bootstrap_messages %}
     {% endautoescape %}
 
     <div class="col-lg-8 col-md-8 col-sm-12">
@@ -66,21 +66,8 @@
 
     <!-- Tools DIV-->
     <div class="col-lg-4 col-md-4 col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h4>Tools</h4>
-        </div>
-      </div>
+      {% include "tools.html" %}
 
-      <div class="list-group">
-        {% if have_access_for_writing %}
-            <!-- TODO Tuto bude tlačidlo na otvorenie modálneho formuláru na vytvorenie priečinka -->
-            <button type="button" class="btn list-group-item" data-toggle="modal" data-target="#modal_create_dir">
-              Create new directory
-              <!-- <span class="glyphicon glyphicon-search"></span>-->
-            </button>
-        {% endif %}
-      </div>
     </div>
 
     {% if loadtime %}
@@ -152,27 +139,5 @@
 
 
 {% block navbar_content %}
-  <ul class="nav navbar-nav">
-    {% for element in path_elements %}
-      <li><a href="{% url "path" element.0 %} ">{{ element.1 }}</a></li>
-    {% endfor %}
-  </ul>
-
-  <ul class="nav navbar-nav navbar-right">
-    {% if user.is_anonymous %}
-      <li><a href="{% url "login" current_path %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-    {% else %}
-      <li><a>Hi {{ user }}!</a></li>
-      {% if user.is_staff %}
-        <li><a href="/admin"><span class="glyphicon glyphicon-user"></span> Admin panel</a></li>
-      {% endif %}
-      <li><a href="{% url "logout" %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-    {% endif %}
-  </ul>
-
-  <form class="navbar-form navbar-right">
-    <div class="input-group">
-      <input type="text" class="form-control" id="filterInput" placeholder="Filter..." name="search">
-    </div>
-  </form>
+  {% include "navbar.html" %}
 {% endblock %}
