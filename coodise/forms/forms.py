@@ -26,7 +26,7 @@ class CreateDirForm(forms.Form):
         self.helper.form_id = 'id-create-dir'
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Create'))
+        # self.helper.add_input(Submit('submit', 'Create'))
 
     def clean(self):
         cleaned_data = super(CreateDirForm, self).clean()
