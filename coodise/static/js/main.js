@@ -6,16 +6,19 @@ $(document).ready(function(){
     }
   );
 
-  $('.modal.fade').on('show.bs.modal', function(){
-    // if modal is shown
-    var preview_div = $(this).find('.picture_preview');
-    // <img class="rounded preview" src=""/>
-    var img = $("<img />").attr('src', preview_div.text());
-    img.attr('class', 'rounded preview');
-    preview_div.text("");
-    preview_div.append(img);
-
+  $('.modal.fade').on('show.bs.modal', function()
+    {
+      // if modal is shown
+      var preview_div = $(this).find('.picture_source');
+      var modal_body = $(this).find('.modal-body');
+      var img_exist = $(this).find('.rounded.preview').length;
+      if (img_exist == 0) {
+        var img = $("<img />").attr('src', preview_div.text());
+        img.attr('class', 'rounded preview');
+        console.log(img);
+        modal_body.append(img);
       }
+    }
   );
 
   $('.badge.spoiler').click(

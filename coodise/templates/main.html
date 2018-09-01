@@ -99,7 +99,7 @@
                           <source src="{% url "file_server" file.get_full_path %}">
                       </audio>
                     {% elif file.get_media_type == "Picture" %}
-                      <div class="picture_preview">{% url "file_server" file.get_full_path %}</div>
+                      <div class="picture_source hidden">{% url "file_server" file.get_full_path %}</div>
                        {# TODO: Rewrite with Ajax  #}
                     {% elif file.get_media_type == "Text" %}
                       <span class="preview" style="white-space: pre-line">
