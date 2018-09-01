@@ -99,7 +99,8 @@
                           <source src="{% url "file_server" file.get_full_path %}">
                       </audio>
                     {% elif file.get_media_type == "Picture" %}
-                      <img class="rounded preview" src="{% url "file_server" file.get_full_path %}"> {# TODO: Rewrite with Ajax #}
+                      <div class="picture_preview">{% url "file_server" file.get_full_path %}</div>
+                       {# TODO: Rewrite with Ajax  #}
                     {% elif file.get_media_type == "Text" %}
                       <span class="preview" style="white-space: pre-line">
                         <pre class="pre-scrollable">{{ file.get_content|tabsToSpaces }}</pre>
