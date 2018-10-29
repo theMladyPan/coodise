@@ -21,6 +21,7 @@ class LoginForm(forms.Form):
 class CreateDirForm(forms.Form):
     """Form for creating new directory."""
     dir_name = forms.CharField(label='Name for new directory', max_length=255)
+    tool = forms.CharField(initial="create_dir", widget=forms.HiddenInput())
 
     def __init__(self, *args, **kwargs):
         super(CreateDirForm, self).__init__(*args, **kwargs)
@@ -41,6 +42,7 @@ class CreateFileForm(forms.Form):
     """Form for creating new empty file."""
     file_name = forms.CharField(
         label='Name for new empty file', max_length=255)
+    tool = forms.CharField(initial="create_file", widget=forms.HiddenInput())
 
     def __init__(self, *args, **kwargs):
         super(CreateFileForm, self).__init__(*args, **kwargs)
@@ -59,8 +61,9 @@ class CreateFileForm(forms.Form):
 
 class UploadFileForm(forms.Form):
     """Form for uploading file."""
-    title = forms.CharField(max_length=255, label="Name for new file")
+    file_name = forms.CharField(max_length=255, label="Name for new file")
     file = forms.FileField()
+    tool = forms.CharField(initial="upload_file", widget=forms.HiddenInput())
 
     def __init__(self, *args, **kwargs):
         super(UploadFileForm, self).__init__(*args, **kwargs)

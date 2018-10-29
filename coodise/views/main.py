@@ -82,17 +82,40 @@ class List(View):
     def post(self, request, *args, **kwargs):
         dActions = {
             "create_dir": self.create_dir,
+            "create_file": self.create_file,
             "upload_file": self.upload_file,
         }
         return dActions.get(request.POST.get("tool"))(request, kwargs)
 
+    def create_file(self, request, kwargs):
+        path = kwargs['look_path']
+        file_name = request.POST.get("file_name")
+        full_path = os.path.join(
+            os.path.join(settings.MEDIA_DIR, path), file_name)
+        if os.path.isfile(full_path):
+            messages.warning(
+                request,
+                f"File or directory with name '{file_name}' already exists")
+        else:
+            open(full_path, 'a').close()
+            messages.success(request, f"File '{file_name}' created.")
+
+        return redirect(reverse("path", args=(path, )))
+
     def upload_file(self, request, kwargs):
         path = kwargs['look_path']
-        full_path = os.path.join(settings.MEDIA_DIR, path)
-        print(full_path)
-        with open(os.path.join(full_path, request.POST.get("title")),
-                  "wb") as out_file:
-            out_file.write(request.FILES["file"].read())
+        file_name = request.POST.get("file_name")
+        full_path = os.path.join(
+            os.path.join(settings.MEDIA_DIR, path), file_name)
+
+        if os.path.isfile(full_path):
+            messages.warning(
+                request,
+                f"File or directory with name '{file_name}' already exists")
+        else:
+            with open(full_path, "wb") as out_file:
+                out_file.write(request.FILES["file"].read())
+            messages.success(request, f"File '{file_name}' uploaded.")
 
         return redirect(reverse("path", args=(path, )))
 

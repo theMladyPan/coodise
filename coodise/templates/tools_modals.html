@@ -1,75 +1,11 @@
 {% load crispy_forms_tags %}
 
 {% if have_access_for_writing %}
-  <div class="modal fade" id="modal_create_dir" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Create new directory in current one</h4>
-        </div>
-        <div class="modal-body">
-          {% if not user.is_anonymous %}
-            {% crispy create_dir_form %}
-          {% else %}
-            Please log in first to create subdirectories.
-          {% endif %}
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-        <div class="modal-footer">
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="modal fade" id="modal_create_empty_file" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Create new empty file in current directory</h4>
-        </div>
-        <div class="modal-body">
-          {% if not user.is_anonymous %}
-            {% crispy create_file_form %}
-          {% else %}
-            Please log in first to create files.
-          {% endif %}
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-        <div class="modal-footer">
-        </div>
-      </div>
-    </div>
-  </div>
+{% include "modal_mixin.html" with modal_id="modal_create_dir" modal_header="Create new directory in current one" form=create_dir_form button_name="Create" %}
 
-  <div class="modal fade" id="modal_upload_file" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Upload file</h4>
-        </div>
-        <form class="blueForms" id="id-upload-file" method="post" enctype="multipart/form-data">
-          <div class="modal-body">
-            {% if not user.is_anonymous %}
-            {% csrf_token %}
-            <input type="hidden" name="tool" value="upload_file">
-            <table>
-              {{ upload_file_form.as_table }}
-            </table>
-            {% else %}
-              Please log in first to upload files.
-            {% endif %}
-          </div>
-          <div class="modal-footer">
-            {% if not user.is_anonymous %}
-              <button type="submit" form=id-upload-file  class="btn btn-primary">Upload</button>
-            {% endif %}
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+{% include "modal_mixin.html" with modal_id="modal_create_empty_file" modal_header="Create new empty file in current directory" form=create_file_form button_name="Create"  %}
+
+{% include "modal_mixin.html" with modal_id="modal_upload_file" modal_header="Upload file" form=upload_file_form button_name="Upload" %}
+
 {% endif %}
