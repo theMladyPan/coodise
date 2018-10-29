@@ -10,6 +10,10 @@
   {% else %}
     <li><a>Hi {{ user }}!</a></li>
     {% if user.is_staff %}
+      <li><a data-toggle="modal" href="#show-debug">
+        <span class="glyphicon glyphicon-cog"></span>
+        Debug info</a>
+      </li>
       <li><a href="/admin"><span class="glyphicon glyphicon-user"></span> Admin panel</a></li>
     {% endif %}
     <li><a href="{% url "logout" %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>

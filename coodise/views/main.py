@@ -7,7 +7,7 @@ from time import time
 from ..utils import parser
 from .. import settings
 from django.shortcuts import redirect
-from ..forms.forms import CreateDirForm
+from ..forms.forms import CreateDirForm, CreateFileForm, UploadFileForm
 from django.urls import reverse
 from django.contrib import messages
 import os
@@ -51,11 +51,18 @@ class List(View):
     def get(self, request, *args, **kwargs):
         stopwatch = time()
 
+        dForms = {
+            "create_dir_form": CreateDirForm,
+            "create_file_form": CreateFileForm,
+            "upload_file_form": UploadFileForm,
+        }
+        for form in dForms.keys():
+            self.content[form] = dForms.get(form)
+
         path = kwargs['look_path']
         dir_content = parser.parse_directory(path)
         self.content['have_access_for_writing'] = os.access(
             os.path.join(settings.MEDIA_DIR, path), os.W_OK)
-        self.content["create_dir_form"] = CreateDirForm
         self.content['files'] = dir_content[1]
         self.content['user'] = request.user
         self.content['path'] = path
@@ -73,6 +80,23 @@ class List(View):
         return render(request, self.template, self.content)
 
     def post(self, request, *args, **kwargs):
+        dActions = {
+            "create_dir": self.create_dir,
+            "upload_file": self.upload_file,
+        }
+        return dActions.get(request.POST.get("tool"))(request, kwargs)
+
+    def upload_file(self, request, kwargs):
+        path = kwargs['look_path']
+        full_path = os.path.join(settings.MEDIA_DIR, path)
+        print(full_path)
+        with open(os.path.join(full_path, request.POST.get("title")),
+                  "wb") as out_file:
+            out_file.write(request.FILES["file"].read())
+
+        return redirect(reverse("path", args=(path, )))
+
+    def create_dir(self, request, kwargs):
         new_dir_name = request.POST["dir_name"]
         path = kwargs['look_path']
         current_dir = os.path.join(

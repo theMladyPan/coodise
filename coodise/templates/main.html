@@ -21,7 +21,6 @@
 {% block body%}
   <div id="mainContainer" class="container">
 
-
     <div class="col-lg-8 col-md-8 col-sm-12">
 
       <div class="panel panel-default">
@@ -36,6 +35,7 @@
             {% if directory.relative_path %}
                 <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item">
                   <span class="glyphicon glyphicon-folder-open"></span> {{ directory }}
+                  <span class="badge">{{ directory.get_n_of_files_in_dir }}</span> {# TODO: Fix this #}
                 </a>
             {% else %}
                 <a href="{% url "index" %}"><span class="glyphicon glyphicon-folder-open"></span> {{ directory }}</a>
@@ -52,6 +52,7 @@
                 </button>
               {% endif %}
             {% endif %}
+            <span class="badge">{{ file.get_file_size|filesizeformat }}</span>
             <span class="glyphicon {{ file.media_type.image }}"></span> {{ file }}
           </a>
 
@@ -77,6 +78,8 @@
     <div class="modals">
 
       {% include "tools_modals.html" %}
+
+      {% include "debug_info.html" %}
 
       {% for file in files %}
       {# prepare modal window #}
