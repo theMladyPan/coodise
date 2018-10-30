@@ -47,6 +47,7 @@ class List(View):
 
     content = dict()
     template = 'main.html'
+    error = '404.html'
 
     def get(self, request, *args, **kwargs):
         stopwatch = time()
@@ -60,12 +61,16 @@ class List(View):
             self.content[form] = dForms.get(form)
 
         path = kwargs['look_path']
+        self.content['path'] = path
+        self.content["media_dir"] = settings.MEDIA_DIR
+        if not os.path.isdir(os.path.join(settings.MEDIA_DIR, path)):
+            return render(request, self.error, self.content)
+
         dir_content = parser.parse_directory(path)
         self.content['have_access_for_writing'] = os.access(
             os.path.join(settings.MEDIA_DIR, path), os.W_OK)
         self.content['files'] = dir_content[1]
         self.content['user'] = request.user
-        self.content['path'] = path
         self.content['path_tail'] = "..." + str(path)[-16:]
         if path:
             self.content['path_elements'] = generate_elements(str(path))
