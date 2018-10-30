@@ -67,9 +67,14 @@ class List(View):
         self.content['user'] = request.user
         self.content['path'] = path
         self.content['path_tail'] = "..." + str(path)[-16:]
-        self.content['path_elements'] = generate_elements(str(path))
-        self.content['last_path_element'] = self.content['path_elements'][-1][
-            1]
+        if path:
+            self.content['path_elements'] = generate_elements(str(path))
+            self.content['last_path_element'] = self.content['path_elements'][
+                -1][1]
+        else:
+            self.content["path_elements"] = ""
+            self.content["last_path_element"] = ""
+
         self.content['directories'] = dir_content[0]
         self.content['loadtime'] = "%d" % ((time() - stopwatch) * 1000)
         self.content["current_path"] = path

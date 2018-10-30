@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block title %}
-  {% if webpage_title %}
-    {{ webpage_title }}
+  {% if not last_path_element %}
+    Coodise main
   {% else %}
     Coodise::{{ last_path_element }}
   {% endif %}
