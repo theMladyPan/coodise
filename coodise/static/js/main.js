@@ -11,7 +11,6 @@ $(document).ready(function(){
       if (img_exist == 0) {
         var img = $("<img />").attr('src', preview_div.text());
         img.attr('class', 'rounded preview');
-        console.log(img);
         modal_body.append(img);
       }
     }
