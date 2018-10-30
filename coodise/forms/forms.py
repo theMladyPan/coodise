@@ -35,6 +35,17 @@ class ToolForm(forms.Form):
         cleaned_data = super().clean()
 
 
+class DeleteFileForm(ToolForm):
+    """Form for deleting files or directories."""
+
+    tool = forms.CharField(initial="delete_file", widget=forms.HiddenInput())
+    item_to_delete = forms.CharField(widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.form_id = 'id-delete-file'
+
+
 class CreateDirForm(ToolForm):
     """Form for creating new directory."""
 

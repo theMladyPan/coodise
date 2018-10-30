@@ -67,8 +67,28 @@ function renameItem(item){
   path = path[path.length -1]
   var $modal = $("#modal-rename");
   $modal.find(".modal-title").text("Rename " + path);
+  $modal.find('input[name="new_name"]').val(path)
   $("#id_old_name").val(path);
   $modal.modal("show")
+}
+
+function deleteItem(item){
+  var path = item.getAttribute("data-path"); // backend side file
+  var $modal_body = $("#modal-delete").find(".modal-body");
+  $modal_body.find('input[name="item_to_delete"]').val(path);
+  path=path.split("/");
+  path = path[path.length -1]
+  var $message = $modal_body.find(".message");
+  $message.html("<p>Do you really want to <strong>delete "+path+"</strong>? This operation can <strong>not</strong> be undone.</p>");
+
+  // find if directory have any subdirectories
+  if (item.getAttribute("data-type") === "directory"){
+    nOfFiles = $(item).find(".n-of-files").text().split("/")
+    if (nOfFiles[0] > 0 || nOfFiles[1] > 0){
+      $message.append('<p class="alert alert-danger">Warning! Directory contains files or other subdirectories.</p>')
+    }
+  }
+  $("#modal-delete").modal("show");
 }
 
 $(".menu-items").contextMenu({
@@ -81,7 +101,7 @@ $(".menu-items").contextMenu({
           renameItem(invokedOn[0]);
           break;
         case "2":
-          // copy link
+          // Copy link
           var href =  invokedOn[0].getAttribute("href");
           if (href[0] === "/"){
             var text2copy = window.location.protocol + "//" + window.location.host + href;
@@ -93,6 +113,7 @@ $(".menu-items").contextMenu({
           break;
         case "-1":
           // Delete
+          deleteItem(invokedOn[0])
           break;
         default:
           break;

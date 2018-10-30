@@ -10,4 +10,6 @@
 
 {% include "modal_mixin.html" with modal_id="modal-rename" modal_header="Rename" form=rename_form button_name="Rename"%}
 
+{% include "modal_mixin.html" with modal_id="modal-delete" modal_header="Are you sure?" form=delete_form button_name="Delete" btn_class="btn-danger" %}
+
 {% endif %}

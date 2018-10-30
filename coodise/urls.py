@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls, name="admin"),
     url(r'^login/(?P<redirect_to>.*)$', login.Login.as_view(), name="login"),
     url(r'^logout/', login.Logout.as_view(), name="logout"),
+    url(r'path//$', RedirectView.as_view(url="/")),
     url(r'path/(?P<look_path>.*)/$', main.List.as_view(), name="path"),
     url(r'file/(?P<file_name>.*)/$', main.Serve.as_view(), name="file_server"),
     url(r'path/$', RedirectView.as_view(url="/")),

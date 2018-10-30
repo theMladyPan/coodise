@@ -23,6 +23,8 @@
 {% endblock %}
 
 {% block body%}
+{% spaceless %}
+
 
   <div id="mainContainer" class="container">
 
@@ -38,9 +40,9 @@
         {% for directory in directories %}
           {% if path or not directory.is_parent %}
             {% if directory.relative_path %}
-                <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item" data-path="{{ directory.relative_path }}" >
+                <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item" data-path="{{ directory.relative_path }}" data-type="directory">
                   <span class="glyphicon glyphicon-folder-open"></span> {{ directory }}
-                  <span class="badge">{{ directory.get_n_of_files_in_dir }}</span> {# TODO: Fix this #}
+                  <span class="badge n-of-files">{{ directory.get_n_of_subdirs_in_dir }}/{{ directory.get_n_of_files_in_dir }}</span>
                 </a>
             {% else %}
                 <a href="{% url "index" %}"><span class="glyphicon glyphicon-folder-open"></span> {{ directory }}</a>
@@ -49,7 +51,7 @@
         {% endfor %}
 
         {% for file in files %}
-          <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}"{% if user.is_anonymous %} title="You need to login to access {{ file }}"{% endif %} data-path="{{ file.relative_path }}">
+          <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}"{% if user.is_anonymous %} title="You need to login to access {{ file }}"{% endif %} data-path="{{ file.relative_path }}" data-type="file">
             {% if file.get_media_type %} {# it is some kind of media, so render peek badge #}
               {% if not user.is_anonymous %}
                 <button type="button" class="btn badge spoiler" data-toggle="modal" data-target="#modal_{{ file|slugify }}">
@@ -126,6 +128,7 @@
   </div>
 
   {% include "context_menu.html" %}
+  {% endspaceless %}
 {% endblock %}
 
 

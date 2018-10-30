@@ -16,10 +16,11 @@
           {% else %}
             Please log in first.
           {% endif %}
+          <div class="message"></div>
         </div>
         <div class="modal-footer">
           {% if not user.is_anonymous %}
-            <button type="submit" form="{{ form.helper.form_id }}"  class="btn btn-primary">{{ button_name }}</button>
+            <button type="submit" form="{{ form.helper.form_id }}"  class="btn {% if btn_class %}{{ btn_class }}{% else %}btn-primary{% endif %}">{{ button_name }}</button>
           {% endif %}
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>

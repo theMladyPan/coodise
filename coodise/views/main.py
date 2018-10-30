@@ -7,10 +7,11 @@ from time import time
 from ..utils import parser
 from .. import settings
 from django.shortcuts import redirect
-from ..forms.forms import CreateDirForm, CreateFileForm, UploadFileForm, RenameForm
+from ..forms.forms import CreateDirForm, CreateFileForm, UploadFileForm, RenameForm, DeleteFileForm
 from django.urls import reverse
 from django.contrib import messages
 import os
+from shutil import rmtree
 
 
 class Serve(View):
@@ -57,6 +58,7 @@ class List(View):
             "create_file_form": CreateFileForm,
             "upload_file_form": UploadFileForm,
             "rename_form": RenameForm,
+            "delete_form": DeleteFileForm,
         }
         for form in dForms.keys():
             self.content[form] = dForms.get(form)
@@ -97,8 +99,25 @@ class List(View):
             "create_file": self.create_file,
             "upload_file": self.upload_file,
             "rename_file": self.rename_file,
+            "delete_file": self.delete_file,
         }
         return dActions.get(request.POST.get("tool"))(request, kwargs)
+
+    def delete_file(self, request, kwargs):
+        path = kwargs['look_path']
+        item_to_delete = request.POST.get("item_to_delete")
+        full_path = os.path.join(settings.MEDIA_DIR,
+                                 item_to_delete.lstrip("/"))
+
+        if os.path.isfile(full_path):
+            # deleting file
+            os.remove(full_path)
+        else:
+            rmtree(full_path, ignore_errors=True)
+
+        messages.success(request, f"{item_to_delete} successfully deleted.")
+
+        return redirect(reverse("path", args=(path, )))
 
     def rename_file(self, request, kwargs):
         new_name = request.POST.get("new_name")
@@ -108,9 +127,6 @@ class List(View):
         directory = ("/".join(full_old_name.split("/")[:-1])).lstrip("/")
         full_new_name = os.path.join(directory, new_name)
 
-        print(
-            f"path {path} new_name {new_name} fulloldname {full_old_name} director {directory} fullnewname {full_new_name}"
-        )
         if os.path.isfile(full_new_name) or os.path.isdir(full_new_name):
             messages.warning(
                 request,

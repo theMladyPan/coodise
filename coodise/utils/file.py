@@ -62,6 +62,16 @@ class File:
             return len(files_only)
         return -1
 
+    def get_n_of_subdirs_in_dir(self):
+        if self.is_dir:
+            files_only = list(
+                filter(lambda name: os.path.isdir(name), [
+                    f"{self.full_path}/{name}"
+                    for name in os.listdir(self.full_path)
+                ]))
+            return len(files_only)
+        return -1
+
     def get_file_size(self):
         return os.path.getsize(self.full_path)
 
