@@ -110,6 +110,8 @@ class List(View):
     def upload_file(self, request, kwargs):
         path = kwargs['look_path']
         file_name = request.POST.get("file_name")
+        if not file_name:
+            file_name = str(request.FILES["file"])
         full_path = os.path.join(
             os.path.join(settings.MEDIA_DIR, path), file_name)
 
