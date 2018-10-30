@@ -27,8 +27,7 @@ urlpatterns = [
     url(r'^logout/', login.Logout.as_view(), name="logout"),
     url(r'path/(?P<look_path>.*)/$', main.List.as_view(), name="path"),
     url(r'file/(?P<file_name>.*)/$', main.Serve.as_view(), name="file_server"),
-    url(r'path/$', main.List.as_view(), {"look_path": "."}, name='index'),
-    # url(r'path/$', RedirectView.as_view(url="/"), name="index"),
+    url(r'path/$', RedirectView.as_view(url="/")),
     url(r'^$', main.List.as_view(), {"look_path": ""}, name="index")
 ]
 urlpatterns += staticfiles_urlpatterns()

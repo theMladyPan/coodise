@@ -1,10 +1,6 @@
 $(document).ready(function(){
 
-  $('.file_content.disabled').click(
-    function(){
-      return false;
-    }
-  );
+  $("input").addClass("form-control")
 
   $('.modal.fade').on('show.bs.modal', function()
     {

@@ -11,15 +11,15 @@
 {% endautoescape %}
 
 <div class="list-group">
-  <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal_create_dir">
+  <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal-create-dir">
     Create new directory
     <span class="badge"><span class="glyphicon glyphicon-folder-open"></span></span>
   </button>
-  <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal_create_empty_file">
+  <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal-create-empty-file">
     Create empty file
     <span class="badge"><span class="glyphicon glyphicon-file"></span></span>
   </button>
-  <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal_upload_file">
+  <button type="button" class="btn list-group-item{% if not have_access_for_writing %} disabled{% endif %}" data-toggle="modal" data-target="#modal-upload-file">
     Upload file
     <span class="badge"><span class="glyphicon glyphicon-cloud-upload"></span></span>
   </button>

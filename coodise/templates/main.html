@@ -8,6 +8,10 @@
   <script src={% static "js/navbar.js" %}></script>
   <script src={% static "js/content_filter.js" %}></script>
   <script src={% static "js/main.js" %}></script>
+  <script src={% static "js/context_menu.js" %}></script>
+  <script>
+    var media_dir = "{{ media_dir }}";
+  </script>
 {% endblock %}
 
 {% block title %}
@@ -19,6 +23,7 @@
 {% endblock %}
 
 {% block body%}
+
   <div id="mainContainer" class="container">
 
     <div class="col-lg-8 col-md-8 col-sm-12">
@@ -29,11 +34,11 @@
         </div>
       </div>
 
-      <div class="list-group">
+      <div class="list-group menu-items">
         {% for directory in directories %}
           {% if path or not directory.is_parent %}
             {% if directory.relative_path %}
-                <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item">
+                <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item" data-path="{{ directory.relative_path }}" >
                   <span class="glyphicon glyphicon-folder-open"></span> {{ directory }}
                   <span class="badge">{{ directory.get_n_of_files_in_dir }}</span> {# TODO: Fix this #}
                 </a>
@@ -44,7 +49,7 @@
         {% endfor %}
 
         {% for file in files %}
-          <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}"{% if user.is_anonymous %} title="You need to login to access {{ file }}"{% endif %}>
+          <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}"{% if user.is_anonymous %} title="You need to login to access {{ file }}"{% endif %} data-path="{{ file.relative_path }}">
             {% if file.get_media_type %} {# it is some kind of media, so render peek badge #}
               {% if not user.is_anonymous %}
                 <button type="button" class="btn badge spoiler" data-toggle="modal" data-target="#modal_{{ file|slugify }}">
@@ -119,6 +124,8 @@
     </div>
 
   </div>
+
+  {% include "context_menu.html" %}
 {% endblock %}
 
 

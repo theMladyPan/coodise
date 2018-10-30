@@ -2,10 +2,12 @@
 
 {% if have_access_for_writing %}
 
-{% include "modal_mixin.html" with modal_id="modal_create_dir" modal_header="Create new directory in current one" form=create_dir_form button_name="Create" %}
+{% include "modal_mixin.html" with modal_id="modal-create-dir" modal_header="Create new directory in current one" form=create_dir_form button_name="Create" %}
 
-{% include "modal_mixin.html" with modal_id="modal_create_empty_file" modal_header="Create new empty file in current directory" form=create_file_form button_name="Create"  %}
+{% include "modal_mixin.html" with modal_id="modal-create-empty-file" modal_header="Create new empty file in current directory" form=create_file_form button_name="Create"  %}
 
-{% include "modal_mixin.html" with modal_id="modal_upload_file" modal_header="Upload file" form=upload_file_form button_name="Upload" %}
+{% include "modal_mixin.html" with modal_id="modal-upload-file" modal_header="Upload file" form=upload_file_form button_name="Upload" %}
+
+{% include "modal_mixin.html" with modal_id="modal-rename" modal_header="Rename" form=rename_form button_name="Rename"%}
 
 {% endif %}

@@ -69,3 +69,15 @@ class UploadFileForm(ToolForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper.form_id = 'id-upload-file'
+
+
+class RenameForm(ToolForm):
+    """Form for renamig."""
+
+    new_name = forms.CharField(max_length=255, label="New name")
+    tool = forms.CharField(initial="rename_file", widget=forms.HiddenInput())
+    old_name = forms.CharField(widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.form_id = 'id-rename'

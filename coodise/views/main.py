@@ -7,7 +7,7 @@ from time import time
 from ..utils import parser
 from .. import settings
 from django.shortcuts import redirect
-from ..forms.forms import CreateDirForm, CreateFileForm, UploadFileForm
+from ..forms.forms import CreateDirForm, CreateFileForm, UploadFileForm, RenameForm
 from django.urls import reverse
 from django.contrib import messages
 import os
@@ -56,6 +56,7 @@ class List(View):
             "create_dir_form": CreateDirForm,
             "create_file_form": CreateFileForm,
             "upload_file_form": UploadFileForm,
+            "rename_form": RenameForm,
         }
         for form in dForms.keys():
             self.content[form] = dForms.get(form)
@@ -67,9 +68,11 @@ class List(View):
             return render(request, self.error, self.content)
 
         dir_content = parser.parse_directory(path)
+        self.content['directories'] = dir_content[0]
+        self.content['files'] = dir_content[1]
+
         self.content['have_access_for_writing'] = os.access(
             os.path.join(settings.MEDIA_DIR, path), os.W_OK)
-        self.content['files'] = dir_content[1]
         self.content['user'] = request.user
         self.content['path_tail'] = "..." + str(path)[-16:]
         if path:
@@ -80,7 +83,6 @@ class List(View):
             self.content["path_elements"] = ""
             self.content["last_path_element"] = ""
 
-        self.content['directories'] = dir_content[0]
         self.content['loadtime'] = "%d" % ((time() - stopwatch) * 1000)
         self.content["current_path"] = path
 
@@ -94,8 +96,30 @@ class List(View):
             "create_dir": self.create_dir,
             "create_file": self.create_file,
             "upload_file": self.upload_file,
+            "rename_file": self.rename_file,
         }
         return dActions.get(request.POST.get("tool"))(request, kwargs)
+
+    def rename_file(self, request, kwargs):
+        new_name = request.POST.get("new_name")
+        path = kwargs['look_path']
+        full_old_name = os.path.join(settings.MEDIA_DIR, path,
+                                     request.POST.get("old_name").lstrip("/"))
+        directory = ("/".join(full_old_name.split("/")[:-1])).lstrip("/")
+        full_new_name = os.path.join(directory, new_name)
+
+        print(
+            f"path {path} new_name {new_name} fulloldname {full_old_name} director {directory} fullnewname {full_new_name}"
+        )
+        if os.path.isfile(full_new_name) or os.path.isdir(full_new_name):
+            messages.warning(
+                request,
+                f"File or directory with name '{new_name}' already exists")
+        else:
+            os.rename(full_old_name, full_new_name)
+            messages.success(request, f"File '{new_name}' renamed.")
+
+        return redirect(reverse("path", args=(path, )))
 
     def create_file(self, request, kwargs):
         path = kwargs['look_path']
