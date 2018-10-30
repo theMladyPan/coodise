@@ -1,7 +1,15 @@
-# coodise
+# Coodise
 Coodise, a homeserver in Django for interfacing (and streaming) content from local Storage throught HTTP
 
-## How to install:
+
+## Contains:
+Coodise [source code](coodise/)
+
+## Main branch:
+for now, [devel](https://github.com/theMladyPan/coodise/tree/devel)
+
+## How to:
+### Install and run for development
 1. Install pip with your favourite package manager (skip if already installed):
 ```bash
 foo@bar:~/$ sudo apt install python3-pip
@@ -21,7 +29,7 @@ foo@bar:~/coodise$ ln -s /path/to/my/storage ./Cloud
 foo@bar:~/coodise$ python3 manage.py runserver
 ```
 
-## Making server public
+#### Making server public
 in coodise/settings.py, line ALLOWED_HOSTS, change it to desired hosts, set to [0] for everybody or temporarily run with:
 ```bash
 foo@bar:~/coodise$ python3 manage.py runserver 0:8000
