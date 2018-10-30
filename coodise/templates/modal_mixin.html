@@ -1,0 +1,39 @@
+<div class="modal fade" id="{{ modal_id }}" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ modal_header }}</h4>
+        {{ form.id.auto_id }}
+      </div>
+      <form class="{{ form.helper.form_class }}" id="{{ form.helper.form_id }}" method="{{ form.helper.form_method }}" enctype="multipart/form-data">
+        <div class="modal-body">
+          {% if not user.is_anonymous %}
+          {% csrf_token %}
+          <table>
+            {{ form.as_table }}
+          </table>
+          {% else %}
+            Please log in first.
+          {% endif %}
+          <div class="message"></div>
+        </div>
+        <div class="modal-footer">
+          {% if not user.is_anonymous %}
+            <button type="submit" form="{{ form.helper.form_id }}"  class="btn {% if btn_class %}{{ btn_class }}{% else %}btn-primary{% endif %}">{{ button_name }}</button>
+          {% endif %}
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% comment %}
+  to include:
+    modal_id
+    modal_header
+    form
+    button_name
+
+{% endcomment %}

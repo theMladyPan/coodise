@@ -6,6 +6,7 @@ from django.views import View
 from ..forms.forms import LoginForm
 from time import sleep
 from django.urls import reverse
+from django.contrib import messages
 
 
 class Login(View):
@@ -26,6 +27,7 @@ class Login(View):
         sleep(0.1)
         if user is not None and user.is_active:
             login(request, user)
+            messages.info(request, 'Logged in successfuly')
             if redirect_to:
                 return redirect(reverse("path", args=(redirect_to, )))
             else:

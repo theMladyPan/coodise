@@ -1,0 +1,15 @@
+{% load crispy_forms_tags %}
+
+{% if have_access_for_writing %}
+
+{% include "modal_mixin.html" with modal_id="modal-create-dir" modal_header="Create new directory in current one" form=create_dir_form button_name="Create" %}
+
+{% include "modal_mixin.html" with modal_id="modal-create-empty-file" modal_header="Create new empty file in current directory" form=create_file_form button_name="Create"  %}
+
+{% include "modal_mixin.html" with modal_id="modal-upload-file" modal_header="Upload file" form=upload_file_form button_name="Upload" %}
+
+{% include "modal_mixin.html" with modal_id="modal-rename" modal_header="Rename" form=rename_form button_name="Rename"%}
+
+{% include "modal_mixin.html" with modal_id="modal-delete" modal_header="Are you sure?" form=delete_form button_name="Delete" btn_class="btn-danger" %}
+
+{% endif %}

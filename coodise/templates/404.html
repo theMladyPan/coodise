@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+
+{% block bootstrap3_extra_script %}
+  <script src={% static "js/navbar.js" %}></script>
+  <script src={% static "js/content_filter.js" %}></script>
+  <script src={% static "js/main.js" %}></script>
+{% endblock %}
+
+{% block title %}
+  {% if not last_path_element %}
+    Coodise main
+  {% else %}
+    Coodise::{{ last_path_element }}
+  {% endif %}
+{% endblock %}
+
+{% block body%}
+
+<div class="container">
+  <div class="jumbotron">
+    <h1><small>404</small></h1>
+    <h1>Sorry =(</h1>
+    <p>
+      <blockquote class="blockquote-reverse">
+        I was looking inside {{media_dir }} but unfortunately</br>
+        <mark>{{ path }}</mark> could not be found.
+        <footer>
+          your Coodise
+        </footer>
+      </blockquote>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

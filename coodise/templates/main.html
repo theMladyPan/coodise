@@ -1,36 +1,48 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 {% load static %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
 
 {% block bootstrap3_extra_script %}
   <script src={% static "js/navbar.js" %}></script>
   <script src={% static "js/content_filter.js" %}></script>
   <script src={% static "js/main.js" %}></script>
+  <script src={% static "js/context_menu.js" %}></script>
+  <script>
+    var media_dir = "{{ media_dir }}";
+  </script>
 {% endblock %}
 
 {% block title %}
-  {% if webpage_title %}
-    {{ webpage_title }}
+  {% if not last_path_element %}
+    Coodise main
   {% else %}
     Coodise::{{ last_path_element }}
   {% endif %}
 {% endblock %}
 
 {% block body%}
+{% spaceless %}
+
+
   <div id="mainContainer" class="container">
 
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <h4>Content of {% if last_path_element %}{{ last_path_element }}{% else %}Coodise{% endif %}</h4>
-      </div>
-    </div>
+    <div class="col-lg-8 col-md-8 col-sm-12">
 
-    <div class="list-group">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h4>Content of {% if last_path_element %}{{ last_path_element }}{% else %}Coodise{% endif %}</h4>
+        </div>
+      </div>
+
+      <div class="list-group menu-items">
         {% for directory in directories %}
           {% if path or not directory.is_parent %}
             {% if directory.relative_path %}
-                <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item">
+                <a href="{% if not path %}path/{% endif %}{{ directory }}/" class="list-group-item" data-path="{{ directory.relative_path }}" data-type="directory">
                   <span class="glyphicon glyphicon-folder-open"></span> {{ directory }}
+                  <span class="badge n-of-files">{{ directory.get_n_of_subdirs_in_dir }}/{{ directory.get_n_of_files_in_dir }}</span>
                 </a>
             {% else %}
                 <a href="{% url "index" %}"><span class="glyphicon glyphicon-folder-open"></span> {{ directory }}</a>
@@ -39,83 +51,87 @@
         {% endfor %}
 
         {% for file in files %}
-        <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}">
-          {% if file.get_media_type %} {# it is some kind of media, so render peek window #}
-            {% if not user.is_anonymous %}
-              {% if file.get_media_type == "Video" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                      <video height="480" width="640" preload="none" controls>
-                          <source src="{% url "file_server" file.get_full_path %}">
-                          Your brower is piece of crap
-                      </video>
-                  </p>
-              {% elif file.get_media_type == "Audio" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                      <audio preload="none" controls>
-                          <source src="{% url "file_server" file.get_full_path %}">
-                          Your brower is piece of crap
-                      </audio>
-                  </p>
-              {% elif file.get_media_type == "Picture" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                      <img src="{% url "file_server" file.get_full_path %}">
-                  </p>
-              {% elif file.get_media_type == "Text" %}
-                  <p id="spoiler_{{ file }}" style="display:none;clear:both">
-                    <span style="white-space: pre-line">
-                      <code>
-                        {{ file.get_content }}
-                      </code>
-                    </span>
-                  </p>
+          <a href="{% if user.is_anonymous %}#{% else %}{% url "file_server" file.get_full_path %}{% endif %}" class="list-group-item file_content {% if user.is_anonymous %}disabled{% endif %}"{% if user.is_anonymous %} title="You need to login to access {{ file }}"{% endif %} data-path="{{ file.relative_path }}" data-type="file">
+            {% if file.get_media_type %} {# it is some kind of media, so render peek badge #}
+              {% if not user.is_anonymous %}
+                <button type="button" class="btn badge spoiler" data-toggle="modal" data-target="#modal_{{ file|slugify }}">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
               {% endif %}
-
-              <span class="badge spoiler" title="Click to show/hide content" onclick="if(document.getElementById('spoiler_{{ file }}') .style.display=='none') {document.getElementById('spoiler_{{ file }}') .style.display=''}else{document.getElementById('spoiler_{{ file }}') .style.display='none'}">
-                <span class="glyphicon glyphicon-search"></span>
-              </span>
             {% endif %}
-          {% endif %}
+            <span class="badge">{{ file.get_file_size|filesizeformat }}</span>
             <span class="glyphicon {{ file.media_type.image }}"></span> {{ file }}
+          </a>
 
-            </a>
         {% endfor %}
+      </div>
+
     </div>
 
-  {% if loadtime %}
-    <div class="panel panel-default">
-      <div class="panel-body">
-        loaded in {{ loadtime }}ms
-      </div>
+    <div class="col-lg-4 col-md-4 col-sm-12">
+      {% include "tools.html" %}
     </div>
-  {% endif %}
+
+    {% if loadtime %}
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            loaded in {{ loadtime }}ms
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="modals">
+
+      {% include "tools_modals.html" %}
+
+      {% include "debug_info.html" %}
+
+      {% for file in files %}
+      {# prepare modal window #}
+        {% if file.get_media_type %} {# it is some kind of media, so render modal window #}
+          {% if not user.is_anonymous %}
+            <div class="modal fade" id="modal_{{ file|slugify }}" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Preview of {{ file }}</h4>
+                  </div>
+                  <div class="modal-body">
+                    {% if file.get_media_type == "Video" %}
+                      <video class="preview" height=480px preload="none" controls>
+                          <source src="{% url "file_server" file.get_full_path %}">
+                      </video>
+                    {% elif file.get_media_type == "Audio" %}
+                      <audio class="preview" preload="none" controls>
+                          <source src="{% url "file_server" file.get_full_path %}">
+                      </audio>
+                    {% elif file.get_media_type == "Picture" %}
+                      <div class="picture_source hidden">{% url "file_server" file.get_full_path %}</div>
+                       {# TODO: Rewrite with Ajax  #}
+                    {% elif file.get_media_type == "Text" %}
+                      <span class="preview" style="white-space: pre-line">
+                        <pre class="pre-scrollable">{{ file.get_content|tabsToSpaces }}</pre>
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
 
   </div>
 
+  {% include "context_menu.html" %}
+  {% endspaceless %}
 {% endblock %}
 
 
 {% block navbar_content %}
-  <ul class="nav navbar-nav">
-    {% for element in path_elements %}
-      <li><a href="{% url "path" element.0 %} ">{{ element.1 }}</a></li>
-    {% endfor %}
-  </ul>
-
-  <ul class="nav navbar-nav navbar-right">
-    {% if user.is_anonymous %}
-      <li><a href="{% url "login" current_path %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-    {% else %}
-      <li><a>Hi {{ user }}!</a></li>
-      {% if user.is_staff %}
-        <li><a href="/admin"><span class="glyphicon glyphicon-user"></span> Admin panel</a></li>
-      {% endif %}
-      <li><a href="{% url "logout" %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-    {% endif %}
-  </ul>
-
-  <form class="navbar-form navbar-right">
-    <div class="input-group">
-      <input type="text" class="form-control" id="filterInput" placeholder="Filter..." name="search">
-    </div>
-  </form>
+  {% include "navbar.html" %}
 {% endblock %}
