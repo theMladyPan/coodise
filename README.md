@@ -10,6 +10,9 @@ for now, [devel](https://github.com/theMladyPan/coodise/tree/devel)
 
 ## How to:
 ### Install and run for development
+
+Make sure you are using latest version of **`python 3.6`** or higher
+
 1. Install pip with your favourite package manager (skip if already installed):
 ```bash
 foo@bar:~/$ sudo apt install python3-pip
