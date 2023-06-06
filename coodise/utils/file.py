@@ -8,10 +8,7 @@ class MediaType:
     """Defines utilities for file media type."""
 
     def __init__(self, filename="", type=None):
-        if type is not None:
-            self.type = type
-        else:
-            self.type = self.yield_type_from_filename(filename)
+        self.type = self.yield_type_from_filename(filename) if type is None else type
         self.deduce_image()
         self.filename = filename
 
@@ -21,10 +18,14 @@ class MediaType:
     def yield_type_from_filename(self, filename):
         extension = filename.split(".")[-1].lower()
 
-        for type in settings.MEDIA_TYPES:
-            if extension in settings.FILE_EXTENSIONS[type]:
-                return type
-        return None
+        return next(
+            (
+                type
+                for type in settings.MEDIA_TYPES
+                if extension in settings.FILE_EXTENSIONS[type]
+            ),
+            None,
+        )
 
     def deduce_image(self):
         if self.type in settings.MEDIA_ICONS.keys():
