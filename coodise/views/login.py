@@ -25,15 +25,15 @@ class Login(View):
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
         sleep(0.1)
-        if user is not None and user.is_active:
-            login(request, user)
-            messages.info(request, 'Logged in successfuly')
-            if redirect_to:
-                return redirect(reverse("path", args=(redirect_to, )))
-            else:
-                return redirect(reverse("index"))
-        else:
+        if user is None or not user.is_active:
             return render(request, self.template, self.content)
+        login(request, user)
+        messages.info(request, 'Logged in successfuly')
+        return (
+            redirect(reverse("path", args=(redirect_to,)))
+            if redirect_to
+            else redirect(reverse("index"))
+        )
 
 
 class Logout(View):

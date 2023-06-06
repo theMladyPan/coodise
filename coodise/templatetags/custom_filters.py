@@ -20,13 +20,11 @@ def htmlFriendly(value):
     safe = safe.replace("<", "&lt;")
     safe = safe.replace(">", "&gt;")
     safe = safe.replace("\t", "    ")
-    safe = safe.replace(" ", "&nbsp;")
-    return safe
+    return safe.replace(" ", "&nbsp;")
 
 
 @register.filter(name="tabsToSpaces")
 def tabsToSpaces(value):
     """Replace HTML tags with &; alternatives."""
     safe = str(value)
-    safe = safe.replace("\t", "    ")
-    return safe
+    return safe.replace("\t", "    ")

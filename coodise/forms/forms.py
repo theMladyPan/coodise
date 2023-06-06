@@ -28,8 +28,7 @@ class ToolForm(forms.Form):
         self.helper.form_method = 'post'
 
     def clean(self):
-        cleaned_data = super().clean()
-        return cleaned_data
+        return super().clean()
 
     def save(self):
         cleaned_data = super().clean()

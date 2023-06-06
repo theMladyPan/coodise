@@ -18,29 +18,27 @@ class Serve(View):
     """Basic fileserver."""
 
     def get(self, request, *args, **kwargs):
-        filepath = kwargs['file_name']
         user = request.user
         if user.is_anonymous:
             return redirect("/")
-        else:
-            # return serve(request, os.path.basename(filepath),
-            #              os.path.dirname(filepath))
-            with open(filepath, "rb") as wish_file:
-                response = HttpResponse(
-                    wish_file.read(), content_type='application')
-            response[
-                'Content-Disposition'] = 'attachment; filename="{}"'.format(
-                    filepath.split("/")[-1])
-            return response
+        filepath = kwargs['file_name']
+        # return serve(request, os.path.basename(filepath),
+        #              os.path.dirname(filepath))
+        with open(filepath, "rb") as wish_file:
+            response = HttpResponse(
+                wish_file.read(), content_type='application')
+        response[
+            'Content-Disposition'
+        ] = f'attachment; filename="{filepath.split("/")[-1]}"'
+        return response
 
 
 def generate_elements(path):
     """Accepts string, split it into subdirectories one at a time."""
-    # Games/Battlefield 3
-    elements = []
-    for element in path.split("/"):
-        elements.append([path.split(element)[0] + element, element])
-    return elements
+    return [
+        [path.split(element)[0] + element, element]
+        for element in path.split("/")
+    ]
 
 
 class List(View):
@@ -60,7 +58,7 @@ class List(View):
             "rename_form": RenameForm,
             "delete_form": DeleteFileForm,
         }
-        for form in dForms.keys():
+        for form in dForms:
             self.content[form] = dForms.get(form)
 
         path = kwargs['look_path']
@@ -76,7 +74,7 @@ class List(View):
         self.content['have_access_for_writing'] = os.access(
             os.path.join(settings.MEDIA_DIR, path), os.W_OK)
         self.content['user'] = request.user
-        self.content['path_tail'] = "..." + str(path)[-16:]
+        self.content['path_tail'] = f"...{str(path)[-16:]}"
         if path:
             self.content['path_elements'] = generate_elements(str(path))
             self.content['last_path_element'] = self.content['path_elements'][
@@ -178,11 +176,10 @@ class List(View):
             os.path.join(settings.BASE_DIR, settings.MEDIA_DIR), path)
         try:
             os.makedirs(os.path.join(current_dir, new_dir_name))
-            messages.success(request,
-                             "Directory {} created.".format(new_dir_name))
+            messages.success(request, f"Directory {new_dir_name} created.")
         except OSError:
             messages.error(
                 request,
-                "Directory {} not created. Perhaps there is already existing directory or read only filesystem.".
-                format(new_dir_name))
+                f"Directory {new_dir_name} not created. Perhaps there is already existing directory or read only filesystem.",
+            )
         return redirect(reverse("path", args=(path, )))
